@@ -1,3 +1,23 @@
 <resources>
     <string name="app_name">fserv</string>
+
+    <string name="error_form">Check your fields!</string>
+    <string name="server_error">Server error:</string>
+    <string name="confirm_email">Confirmation email was send on your email. Please, confirm it.</string>
+    <string name="close_caps">CLOSE</string>
+
+    <string name="error_password_length">Password length is less than 8 symbols</string>
+    <string name="error_password_number">Password don`t has a number</string>
+    <string name="error_password_special">Password don`t has a special symbol</string>
+    <string name="error_email_correct">Email is not correct</string>
+
+    <string name="sign_in">Sign In</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="login">Login</string>
+    <string name="registration">Create account</string>
+
+    <string name="enter_email">Enter email</string>
+    <string name="enter_password">Enter password</string>
+    <string name="verification_confirm">Verification of confirmation</string>
+
 </resources>
