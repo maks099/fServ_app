@@ -58,12 +58,7 @@ fun LoginPage(navController: NavController , application: Application, login: St
                 val mContext = LocalContext.current
 
                 Box(
-                    modifier = Modifier
-                        /*.background(
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    shape = RoundedCornerShape(25.dp, 5.dp, 25.dp, 5.dp)
-                )*/
-                        .align(Alignment.BottomCenter) ,
+                    modifier = Modifier.align(Alignment.BottomCenter),
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.ic_launcher_background) ,
@@ -130,43 +125,24 @@ fun LoginPage(navController: NavController , application: Application, login: St
                                                     call: Call<String> ,
                                                     t: Throwable
                                                 ) {
-                                                    Log.d(
-                                                        TAG ,
-                                                        "failure22 " + t.message
-                                                    )
                                                     val message =
                                                         "${mContext.getText(R.string.server_error)} ${t.message.toString()}"
                                                     showSnackbar(message)
-
-
                                                 }
 
                                                 override fun onResponse(
-                                                    call: Call<String> ,
+                                                    call: Call<String>,
                                                     response: Response<String>
                                                 ) {
-
-
                                                     if (response.isSuccessful) {
-                                                        Log.d(
-                                                            TAG ,
-                                                            "success "
-                                                        )
-
-
-                                                        showSnackbar("success")
-
-
-                                                        /* */
-                                                        /* todo
-                                                      get link onto the post
-                                                      send link to post
-                                                      open link on the post and navigation to main screen
-                                                   */
-                                                    } else {
-
-                                                        showSnackbar("${mContext.getText(R.string.server_error)} ${response.errorBody()?.string().toString()}")
-                                                    }
+                                                        response.body()?.let { viewModel.setUserID(it) }
+                                                        navController.navigate("events_page") {
+                                                            popUpTo("login_page"){
+                                                                inclusive = true
+                                                            }
+                                                            launchSingleTop = true
+                                                        }
+                                                    } else showSnackbar("${mContext.getText(R.string.server_error)} ${response.errorBody()?.string().toString()}")
                                                 }
 
                                                 fun showSnackbar(message: String) {
@@ -211,7 +187,9 @@ fun LoginPage(navController: NavController , application: Application, login: St
                             TextButton(onClick = {
 
                                 navController.navigate("register_page") {
-                                    popUpTo(navController.graph.startDestinationId)
+                                    popUpTo(navController.graph.startDestinationId){
+                                        inclusive = true
+                                    }
                                     launchSingleTop = true
                                 }
 
@@ -228,7 +206,9 @@ fun LoginPage(navController: NavController , application: Application, login: St
                             TextButton(onClick = {
 
                                 navController.navigate("reset_page") {
-                                    popUpTo(navController.graph.startDestinationId)
+                                    popUpTo(navController.graph.startDestinationId){
+                                        inclusive = true
+                                    }
                                     launchSingleTop = true
                                 }
 

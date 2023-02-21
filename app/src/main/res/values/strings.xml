@@ -19,5 +19,13 @@
     <string name="enter_email">Enter email</string>
     <string name="enter_password">Enter password</string>
     <string name="verification_confirm">Verification of confirmation</string>
+    <string name="names">Names</string>
+    <string name="search_by">Search by</string>
+    <string name="sort_by">Sort by</string>
+    <string name="name">name</string>
+    <string name="address">location</string>
+    <string name="date_ascending">date ascending</string>
+    <string name="date_descending">date descending</string>
+    <string name="event_image">Event image</string>
 
 </resources>

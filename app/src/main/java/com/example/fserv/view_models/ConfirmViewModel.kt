@@ -1,18 +1,23 @@
 package com.example.fserv.view_models
 
-import androidx.compose.material.SnackbarResult
 import androidx.lifecycle.ViewModel
-import com.example.fserv.R
+import androidx.lifecycle.viewModelScope
 import com.example.fserv.api.DataRepository
+import com.example.fserv.utils.PreferencesRepository
 import kotlinx.coroutines.launch
 import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
-class ConfirmViewModel(): ViewModel() {
+class ConfirmViewModel: ViewModel() {
 
-    private val dataRepository: DataRepository = DataRepository()
+    private val dataRepository: DataRepository = DataRepository.get()
+    private val preferencesRepository = PreferencesRepository.get()
 
+
+    fun setUserID(userID: String){
+        viewModelScope.launch {
+            preferencesRepository.setUserID(userID)
+        }
+    }
 
     fun confirmAccount(token: String): Call<String> {
         return dataRepository.confirmAccount(token)

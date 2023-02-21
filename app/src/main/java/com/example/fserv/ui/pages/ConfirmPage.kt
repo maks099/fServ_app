@@ -58,7 +58,6 @@ fun ConfirmPage(navController: NavController, token: String){
                 modifier = Modifier
                     .padding(16.dp)
                     .fillMaxWidth()
-
                     .verticalScroll(rememberScrollState()) ,
 
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -74,49 +73,42 @@ fun ConfirmPage(navController: NavController, token: String){
                 )
                 Spacer(modifier = Modifier.height(20.dp))
                 Spacer(modifier = Modifier.height(200.dp))
+                viewModel.confirmAccount(token).enqueue(
+                    object : Callback<String> {
+                        override fun onFailure(call: Call<String> , t: Throwable) {
+                            showSnackbar("${context.getText(R.string.server_error)} ${t.message.toString()}")
+                        }
 
-                Log.d(TAG, "before")
-                    viewModel.confirmAccount(token).enqueue(
-
-                        object : Callback<String> {
-
-                            override fun onFailure(call: Call<String> , t: Throwable) {
-                                showSnackbar("${context.getText(R.string.server_error)} ${t.message.toString()}")
-                            }
-
-                            override fun onResponse(
-                                call: Call<String> , response: Response<String>
-                            ) {
-                                if (response.isSuccessful) {
-                                    Log.d(
-                                        "ConfirmPage" ,
-                                        response.body().toString()
-                                    )
-                                    /*navController.navigate("events_page") {
-                                        popUpTo(navController.graph.startDestinationId)
-                                        launchSingleTop = true
-                                    }*/
-                                } else showSnackbar(
-                                    "${context.getText(R.string.server_error)} ${
-                                        response.errorBody()?.string().toString()
-                                    }"
-                                )
-
-                            }
-
-                            fun showSnackbar(message: String) {
-                                coroutineScope.launch {
-                                    scaffoldState.snackbarHostState.showSnackbar(
-                                        message = message ,
-                                        actionLabel = context.getText(R.string.close_caps)
-                                            .toString()
-                                    )
+                        override fun onResponse(
+                            call: Call<String> , response: Response<String>
+                        ) {
+                            response.body()?.let { viewModel.setUserID(it) }
+                            if (response.isSuccessful) {
+                                navController.navigate("events_page") {
+                                    popUpTo(navController.graph.startDestinationId){
+                                        inclusive = true
+                                    }
+                                    launchSingleTop = true
                                 }
+                            } else showSnackbar(
+                                "${context.getText(R.string.server_error)} ${
+                                    response.errorBody()?.string().toString()
+                                }"
+                            )
+
+                        }
+
+                        fun showSnackbar(message: String) {
+                            coroutineScope.launch {
+                                scaffoldState.snackbarHostState.showSnackbar(
+                                    message = message ,
+                                    actionLabel = context.getText(R.string.close_caps)
+                                        .toString()
+                                )
                             }
                         }
-                    )
-
-
+                    }
+                )
             }
         }
     }

@@ -1,6 +1,7 @@
 package com.example.fserv.api
 
-import com.example.fserv.model.UserInfo
+import com.example.fserv.model.Event
+import com.example.fserv.model.EventResponse
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -21,5 +22,23 @@ interface Api {
 
     @GET("confirmAccount/{token}")
     fun confirmAccount(@Path("token") token: String): Call<String>
+
+
+
+    @FormUrlEncoded
+    @POST("searchEvents")
+    fun searchEvents(
+        @Field("searchTerm") searchTerm: String,
+        @Field("searchType") searchType: String,
+        @Field("userID") userID: String,
+        @Field("page") page: Int = 0): EventResponse
+
+    @GET("getEvents/{userId}/{page}")
+    suspend fun getAllEvents(
+        @Path("userId") userId: String,
+        @Path("page") page: Int = 0
+    ): EventResponse
+
+
 
 }

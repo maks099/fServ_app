@@ -5,28 +5,32 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.fserv.R
 import com.example.fserv.api.DataRepository
 import com.example.fserv.model.UserInfo
 import com.example.fserv.utils.CryptLib
+import com.example.fserv.utils.PreferencesRepository
 import com.example.fserv.utils.getMetaData
+import kotlinx.coroutines.launch
 import retrofit2.Call
 
 private const val TAG = "LoginViewModel"
 public class AuthorizationViewModel: ViewModel() {
 
-    private val dataRepository: DataRepository = DataRepository()
+    private val dataRepository: DataRepository = DataRepository.get()
+    private val preferencesRepository = PreferencesRepository.get()
 
     var emailErrorMsg = -1
     var passwordErrMsg = -1
     var emailError = false
     var passwordError = false
 
-    val maxEmailLength = 40
-    val maxPasswordLength = 40
+    private val maxEmailLength = 40
+    private val maxPasswordLength = 40
 
     var email by mutableStateOf("")
-    var password by mutableStateOf("") // helloworld23#
+    var password by mutableStateOf("")
     var actionButtonStatus by mutableStateOf(true)
 
     fun onPasswordChange(password: String){
@@ -97,6 +101,13 @@ public class AuthorizationViewModel: ViewModel() {
 
         return dataRepository.loginClient(userInfo)
     }
+
+    fun setUserID(userID: String){
+        viewModelScope.launch {
+            preferencesRepository.setUserID(userID)
+        }
+    }
+
 
 }
 

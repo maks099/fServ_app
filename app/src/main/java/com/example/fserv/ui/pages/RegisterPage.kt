@@ -53,14 +53,8 @@ fun RegisterPage(navController: NavController,
                     color = Color.Transparent ,
                 )
         ) {
-
-
             Box(
                 modifier = Modifier
-                    /*.background(
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    shape = RoundedCornerShape(25.dp, 5.dp, 25.dp, 5.dp)
-                )*/
                     .align(Alignment.BottomCenter) ,
             ) {
 
@@ -122,15 +116,11 @@ fun RegisterPage(navController: NavController,
                             viewModel.actionButtonStatus,
                         ) {
                             val res = viewModel.validate()
-                            Log.d(
-                                "RegisterPage" ,
-                                "" + res
-                            )
                             if (res) {
                                 viewModel.registerNewUser(application).enqueue(
                                     object : Callback<String> {
                                         override fun onFailure(
-                                              call: Call<String> ,
+                                            call: Call<String>,
                                             t: Throwable
                                         ) {
                                             showSnackbar("${mContext.getText(R.string.server_error)} ${t.message.toString()}")
@@ -153,7 +143,9 @@ fun RegisterPage(navController: NavController,
                                                     when (snackbarResult) {
                                                         SnackbarResult.Dismissed , SnackbarResult.ActionPerformed -> {
                                                             navController.navigate("login_page/${viewModel.email}") {
-                                                                popUpTo(navController.graph.startDestinationId)
+                                                                popUpTo(navController.graph.startDestinationId){
+                                                                    inclusive = true
+                                                                }
                                                                 launchSingleTop = true
                                                             }
                                                             viewModel.email = ""
@@ -162,13 +154,6 @@ fun RegisterPage(navController: NavController,
                                                         }
                                                     }
                                                 }
-
-                                                /* */
-                                                /* todo
-                                                get link onto the post
-                                                send link to post
-                                                open link on the post and navigation to main screen
-                                             */
                                             } else showSnackbar(
                                                 "${mContext.getText(R.string.server_error)} ${
                                                     response.errorBody()?.string().toString()
@@ -192,8 +177,6 @@ fun RegisterPage(navController: NavController,
                                                 }
                                             }
                                         }
-
-
                                     }
                                 )
                             } else {
@@ -217,12 +200,12 @@ fun RegisterPage(navController: NavController,
 
                         Spacer(modifier = Modifier.padding(10.dp))
                         TextButton(onClick = {
-
                             navController.navigate("login_page") {
-                                popUpTo(navController.graph.startDestinationId)
+                                popUpTo(navController.graph.startDestinationId){
+                                    inclusive = true
+                                }
                                 launchSingleTop = true
                             }
-
                         }) {
                             Text(
                                 text = "Sign In" ,
@@ -236,7 +219,9 @@ fun RegisterPage(navController: NavController,
                         TextButton(onClick = {
 
                             navController.navigate("reset_page") {
-                                popUpTo(navController.graph.startDestinationId)
+                                popUpTo(navController.graph.startDestinationId){
+                                    inclusive = true
+                                }
                                 launchSingleTop = true
                             }
 

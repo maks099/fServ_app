@@ -65,10 +65,19 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0'
     implementation 'com.squareup.retrofit2:converter-scalars:2.9.0'
 
+    implementation "androidx.datastore:datastore-preferences:1.0.0"
+    implementation 'com.valentinilk.shimmer:compose-shimmer:1.0.4'
+    implementation("io.coil-kt:coil-compose:2.2.2")
+
+    def paging_version = "3.1.1"
+    implementation "androidx.paging:paging-runtime:$paging_version"
+    implementation "androidx.paging:paging-compose:1.0.0-alpha17"
+
     implementation "com.google.accompanist:accompanist-insets:0.22.0-rc"
     implementation 'androidx.test:core-ktx:1.4.0'
     implementation group: 'org.mindrot', name: 'jbcrypt', version: 0.4
     implementation 'com.squareup.retrofit2:converter-gson:2.6.1'
+    implementation 'androidx.paging:paging-common-ktx:3.1.1'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
