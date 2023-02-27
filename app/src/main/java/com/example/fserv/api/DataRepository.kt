@@ -1,36 +1,41 @@
 package com.example.fserv.api
 
+import android.util.Log
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
-import androidx.paging.PagingData
-import com.example.fserv.model.Event
-import com.example.fserv.model.SearchOptions
-import com.example.fserv.model.UserInfo
-import kotlinx.coroutines.flow.Flow
+import com.example.fserv.model.app.SearchOptions
+import com.example.fserv.model.server.Client
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 
 const val NETWORK_PAGE_SIZE = 25
 class DataRepository {
-    private lateinit var userId: String
+   private var client: Client = Client()
 
 
     fun updateUserId(newUserId: String){
-        userId = newUserId
+        client._id = newUserId
     }
 
-    fun getUserId(): String {
-        return userId
+    fun updateClient(client: Client){
+        this.client = client
+    }
+
+    fun getClient(): Client {
+        return client
+    }
+
+    fun getClientFromServer(): Call<String>{
+        Log.d("EEEeee", client._id)
+        return api.getClientById(client._id)
     }
 
 
 
 
-    private val api: Api
+    public val api: Api
     init {
-
-
         val retrofit = Retrofit.Builder()
             .baseUrl("http://10.0.2.2:3000/")// https://fserv-api.onrender.com/
             .addConverterFactory(ScalarsConverterFactory.create())
@@ -39,11 +44,11 @@ class DataRepository {
         api = retrofit.create<Api>()
     }
 
-    fun registerNewUser(userData: UserInfo): Call<String> {
+    fun registerNewUser(userData: Client): Call<String> {
         return api.registerNewClient(userData.email, userData.password)
     }
 
-    fun loginClient(userData: UserInfo): Call<String> {
+    fun loginClient(userData: Client): Call<String> {
         return api.loginClient(userData.email, userData.password)
     }
 
@@ -51,22 +56,17 @@ class DataRepository {
         return api.confirmAccount(token)
     }
 
-    private fun getPager(options: SearchOptions): Flow<PagingData<Event>> {
-        return Pager(
-            config = PagingConfig(
-                pageSize = NETWORK_PAGE_SIZE,
-                enablePlaceholders = false
-            ) ,
-            pagingSourceFactory = {
-                EventPagingSource(api = api, options = options)
-            }
-        ).flow
-    }
 
 
-
-    fun searchEvents(options: SearchOptions) = getPager(options)
-
+    fun searchEvents(options: SearchOptions) = Pager(
+        config = PagingConfig(
+            pageSize = NETWORK_PAGE_SIZE,
+            enablePlaceholders = false
+        ) ,
+        pagingSourceFactory = {
+            EventPagingSource(api = api, options = options)
+        }
+    ).flow
 
 
     companion object {

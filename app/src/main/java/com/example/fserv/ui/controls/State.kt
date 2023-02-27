@@ -10,7 +10,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import com.example.fserv.R
+
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun LoadingView(
@@ -28,10 +35,37 @@ fun LoadingView(
 @Composable
 fun LoadingItem() {
     CircularProgressIndicator(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
             .padding(16.dp)
             .wrapContentWidth(Alignment.CenterHorizontally)
     )
+}
+
+
+@Preview
+@Composable
+fun EmptyListItemPreview(){
+    EmptyListItem(modifier = Modifier)
+}
+
+
+@Composable
+fun EmptyListItem(modifier: Modifier = Modifier) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center,
+
+        ) {
+        Text(
+            stringResource(id = R.string.empty_list) ,
+            fontSize = 24.sp ,
+            fontWeight = FontWeight.Bold ,
+            textAlign = TextAlign.Center ,
+
+        )
+    }
 }
 
 @Composable

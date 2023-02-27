@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.fserv.R
 import com.example.fserv.api.DataRepository
-import com.example.fserv.model.UserInfo
+import com.example.fserv.model.server.Client
 import com.example.fserv.utils.CryptLib
 import com.example.fserv.utils.PreferencesRepository
 import com.example.fserv.utils.getMetaData
@@ -87,7 +87,7 @@ public class AuthorizationViewModel: ViewModel() {
         val key = getMetaData(application, "ENCRYPTION_KEY").toString()
         val cryptLib = CryptLib()
         val encryptedPass = cryptLib.encryptPlainTextWithRandomIV(password, key)
-        val userInfo = UserInfo(email, encryptedPass)
+        val userInfo = Client(email, encryptedPass)
 
         return dataRepository.registerNewUser(userInfo)
     }
@@ -97,7 +97,7 @@ public class AuthorizationViewModel: ViewModel() {
         val key = getMetaData(application, "ENCRYPTION_KEY").toString()
         val cryptLib = CryptLib()
         val encryptedPass = cryptLib.encryptPlainTextWithRandomIV(password, key)
-        val userInfo = UserInfo(email, encryptedPass)
+        val userInfo = Client(email, encryptedPass)
 
         return dataRepository.loginClient(userInfo)
     }

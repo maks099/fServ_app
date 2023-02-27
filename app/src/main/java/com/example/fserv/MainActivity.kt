@@ -8,17 +8,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.fserv.model.server.*
 import com.example.fserv.ui.LoginPage
 import com.example.fserv.ui.RegisterPage
-import com.example.fserv.ui.pages.ConfirmPage
-import com.example.fserv.ui.pages.EventsPage
-import com.example.fserv.ui.pages.SplashPage
+import com.example.fserv.ui.pages.*
 import com.example.fserv.ui.theme.FservTheme
-import com.example.fserv.utils.PreferencesRepository
+import com.example.fserv.view_models.TicketViewModel
 import com.google.accompanist.insets.ProvideWindowInsets
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
+import com.google.gson.Gson
 
 private const val TAG = "MainActivity123";
 
@@ -87,6 +84,36 @@ class MainActivity : ComponentActivity() {
                                     )
                                 }
                             )
+
+                            composable(
+                                route="event_page/{event}",
+                                arguments = listOf(navArgument("event"){
+                                    type = EventArgType()
+                                })
+                            ) { navBackStackEntry->
+                                val event = navBackStackEntry.arguments?.getString("event")?.let { Gson().fromJson(it, Event::class.java) }
+                                if (event != null) {
+                                    EventPage(
+                                        navController = navController,
+                                        event = event
+                                    )
+                                }
+                            }
+
+                            composable(
+                                route="tickets_groups/{ticketsGroups}",
+                                arguments = listOf(navArgument("ticketsGroups"){
+                                    type = TicketGroupContainerArgType()
+                                })
+                            ) { navBackStackEntry->
+                                val ticketGroup = navBackStackEntry.arguments?.getString("ticketsGroups")?.let { Gson().fromJson(it, TicketsGroupsContainer::class.java) }
+                                if (ticketGroup != null) {
+                                    TicketsGroups(
+                                        navController = navController,
+                                        viewModel = TicketViewModel(ticketGroup.list)
+                                    )
+                                }
+                            }
                         })
                 }
             }

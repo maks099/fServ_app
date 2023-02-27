@@ -24,8 +24,31 @@
     <string name="sort_by">Sort by</string>
     <string name="name">name</string>
     <string name="address">location</string>
-    <string name="date_ascending">date ascending</string>
-    <string name="date_descending">date descending</string>
+    <string name="date_ascending">Date</string>
+    <string name="date_descending">Date</string>
     <string name="event_image">Event image</string>
+    <string name="empty_list">List is empty</string>
+    <string name="dialog_ok">OK</string>
+
+    <string name="music_tag">Music</string>
+    <string name="study_tag">Study</string>
+    <string name="football_tag">Football</string>
+    <string name="mys_tag">Mystectwo</string>
+    <string name="all_tag">All</string>
+    <string name="lessons_tag">Lessons</string>
+    <string name="food_tag">Food</string>
+    <string name="health_tag">Health</string>
+    <string name="paid_filter">Paid</string>
+    <string name="free_filter">Free</string>
+    <string name="organizer">Organizer:</string>
+    <string name="date">The date of the event</string>
+    <string name="free_entrance">Free entrance</string>
+    <string name="buy_ticket">Buy a ticket</string>
+    <string name="to_pay">To pay:</string>
+    <string name="not_enough_funds">There are not enough funds in your account!</string>
+    <string name="error">Error</string>
+    <string name="payment_confirmation">You confirm the execution of this transaction?</string>
+    <string name="confirmation">Confirmation</string>
+
 
 </resources>

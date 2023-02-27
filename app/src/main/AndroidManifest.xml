@@ -37,6 +37,10 @@
         </activity>
 
         <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAb0FDX-kXAMDvawZWxn43QqTT8xW0QLc0"/>
+
+        <meta-data
             android:name="ENCRYPTION_KEY"
             android:value="${ENCRYPTION_KEY}" />
     </application>

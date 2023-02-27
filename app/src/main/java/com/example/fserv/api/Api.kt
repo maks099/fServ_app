@@ -1,7 +1,7 @@
 package com.example.fserv.api
 
-import com.example.fserv.model.Event
-import com.example.fserv.model.EventResponse
+import com.example.fserv.model.server.Client
+import com.example.fserv.model.server.EventResponse
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -27,10 +27,14 @@ interface Api {
 
     @FormUrlEncoded
     @POST("searchEvents")
-    fun searchEvents(
+    suspend fun searchEvents(
         @Field("searchTerm") searchTerm: String,
         @Field("searchType") searchType: String,
-        @Field("userID") userID: String,
+        @Field("sortType") sortType: String,
+        @Field("category") category: Int,
+        @Field("sortValue") sortValue: Any,
+        @Field("filters") filters: String,
+        @Field("userId") userId: String,
         @Field("page") page: Int = 0): EventResponse
 
     @GET("getEvents/{userId}/{page}")
@@ -38,6 +42,11 @@ interface Api {
         @Path("userId") userId: String,
         @Path("page") page: Int = 0
     ): EventResponse
+
+    @GET("ticketsGroups/{eventID}")
+    fun getTicketGroups(@Path("eventID") eventID: String): Call<String>
+    @GET("clients/{id}")
+    fun getClientById(@Path("id") id: String): Call<String>
 
 
 
