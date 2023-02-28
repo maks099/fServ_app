@@ -172,10 +172,11 @@ fun EventPage(navController: NavController, event: Event){
                 }
             }
 
+
             when(viewModel.downloadType){
                 DownloadType.SUCCESS -> {
                     val listContainer = TicketsGroupsContainer(list = viewModel.ticketsGroups.toList())
-                    navController.navigate("tickets_groups/${listContainer}") {
+                    navController.navigate("tickets_groups/${event}/${listContainer}") {
                         launchSingleTop = true
                     }
                 }

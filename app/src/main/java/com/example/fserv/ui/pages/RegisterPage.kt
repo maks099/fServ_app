@@ -109,11 +109,27 @@ fun RegisterPage(navController: NavController,
                             isError = viewModel.passwordError ,
                             onChange = { viewModel.onPasswordChange(it) }
                         )
+                        Spacer(modifier = Modifier.padding(3.dp))
+                        ClientNameTextField(
+                            value = viewModel.firstName ,
+                            errorMsg = viewModel.firstNameErrMsg ,
+                            isError = viewModel.firstNameError ,
+                            onChange = { viewModel.onFirsNameChange(it) },
+                            inputMessage = R.string.input_first_name
+                        )
+                        Spacer(modifier = Modifier.padding(3.dp))
+                        ClientNameTextField(
+                            value = viewModel.lastName ,
+                            errorMsg = viewModel.lastNameErrMsg ,
+                            isError = viewModel.lastNameError ,
+                            onChange = { viewModel.onLastNameChange(it) },
+                            inputMessage = R.string.input_last_name
+                        )
+
 
                         Spacer(modifier = Modifier.padding(10.dp))
                         SubmitButton(
-                            R.string.registration,
-                            viewModel.actionButtonStatus,
+                            R.string.registration
                         ) {
                             val res = viewModel.validate()
                             if (res) {
@@ -163,37 +179,43 @@ fun RegisterPage(navController: NavController,
                                         }
 
                                         fun showSnackbar(message: String) {
-                                            viewModel.actionButtonStatus = false
-                                            coroutineScope.launch {
-                                                val snackbarResult =
-                                                    scaffoldState.snackbarHostState.showSnackbar(
-                                                        message = message ,
-                                                        actionLabel = mContext.getText(R.string.close_caps)
-                                                            .toString()
-                                                    )
-                                                when (snackbarResult) {
-                                                    SnackbarResult.Dismissed , SnackbarResult.ActionPerformed -> viewModel.actionButtonStatus =
-                                                        true
+                                            if(viewModel.actionButtonStatus){
+                                                viewModel.actionButtonStatus = false
+                                                coroutineScope.launch {
+                                                    val snackbarResult =
+                                                        scaffoldState.snackbarHostState.showSnackbar(
+                                                            message = message ,
+                                                            actionLabel = mContext.getText(R.string.close_caps)
+                                                                .toString()
+                                                        )
+                                                    when (snackbarResult) {
+                                                        SnackbarResult.Dismissed , SnackbarResult.ActionPerformed -> viewModel.actionButtonStatus =
+                                                            true
+                                                    }
                                                 }
                                             }
+
                                         }
                                     }
                                 )
                             } else {
-                                viewModel.actionButtonStatus = false
-                                coroutineScope.launch {
-                                    val snackbarResult =
-                                        scaffoldState.snackbarHostState.showSnackbar(
-                                            message = mContext.getText(R.string.error_form)
-                                                .toString() ,
-                                            actionLabel = mContext.getText(R.string.close_caps)
-                                                .toString()
-                                        )
-                                    when (snackbarResult) {
-                                        SnackbarResult.Dismissed , SnackbarResult.ActionPerformed -> viewModel.actionButtonStatus =
-                                            true
+                                if(viewModel.actionButtonStatus){
+                                    viewModel.actionButtonStatus = false
+                                    coroutineScope.launch {
+                                        val snackbarResult =
+                                            scaffoldState.snackbarHostState.showSnackbar(
+                                                message = mContext.getText(R.string.error_form)
+                                                    .toString() ,
+                                                actionLabel = mContext.getText(R.string.close_caps)
+                                                    .toString()
+                                            )
+                                        when (snackbarResult) {
+                                            SnackbarResult.Dismissed , SnackbarResult.ActionPerformed -> viewModel.actionButtonStatus =
+                                                true
+                                        }
                                     }
                                 }
+
                             }
                         }
 

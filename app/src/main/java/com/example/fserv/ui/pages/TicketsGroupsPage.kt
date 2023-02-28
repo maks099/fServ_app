@@ -24,57 +24,18 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.fserv.R
 import com.example.fserv.api.DataRepository
+import com.example.fserv.model.app.DownloadType
 import com.example.fserv.model.server.TicketGroup
 import com.example.fserv.ui.controls.HorizontalNumberPicker
-import com.example.fserv.view_models.TicketViewModel
+import com.example.fserv.view_models.TicketsGroupsListViewModel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.update
 
 
-val groups = listOf<TicketGroup>(
-    TicketGroup(
-        "1",
-        "first group",
-        40,
-        10,
-    "id"
-    ),
-    TicketGroup(
-        "2",
-        "second group",
-        20,
-        20,
-        "id"
-    ),
-    TicketGroup(
-        "3",
-        "third group",
-        30,
-        3,
-        "id"
-    ),
-    TicketGroup(
-        "4",
-        "fourth group",
-        50,
-        1,
-        "id"
-    ),
-)
-
-@Preview(showSystemUi = true)
-@Composable
-fun TicketGroupPreview(){
-    TicketsGroups(
-        navController = rememberNavController() ,
-        viewModel = TicketViewModel(groups)
-    )
-}
 
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
-fun TicketsGroups(navController: NavController, viewModel: TicketViewModel){
+fun TicketsGroups(navController: NavController, viewModel: TicketsGroupsListViewModel){
 
 
     var errorAlertIsVisible by remember { mutableStateOf(false) }
@@ -83,6 +44,7 @@ fun TicketsGroups(navController: NavController, viewModel: TicketViewModel){
         mutableStateOf(1)
     }
     var selectedValue by rememberSaveable { mutableStateOf(viewModel.ticketsGroups[0]) }
+    val toPay = ticketCount.value * selectedValue.price
 
 
 
@@ -121,31 +83,41 @@ fun TicketsGroups(navController: NavController, viewModel: TicketViewModel){
                     )
                     TicketGroupRow(
                         ticketGroup,
-                        { selectedValue = it
-                            ticketCount.value = 1},
+                        {
+                            selectedValue = it
+                            if(selectedValue.count == 0){
+                                ticketCount.value = 0
+
+                            } else {
+                                ticketCount.value = 1
+
+                            }
+                        },
                         { selectedValue._id == it._id}
                     )
                 }
             }
 
             HorizontalNumberPicker(
-                min = 1 ,
+                min = 0,
                 max = selectedValue.count,
                 default = ticketCount ,
                 onValueChange = {
-                    ticketCount.value = it
+                    if(it > 0) ticketCount.value = it
+                    else ticketCount.value = 1
                 }
             )
-            val toPay = ticketCount.value * selectedValue.price
-            val clientAccount = DataRepository.get().getClient().account
+
             Button(onClick = {
+                val clientAccount = viewModel.getClientAccount()
                 if (toPay > clientAccount) {
                     errorAlertIsVisible = true
 
                 } else {
                     confirmAlertIsVisible = true
                 }
-            }) {
+            },
+            enabled = selectedValue.count > 0) {
 
                 Text(text = stringResource(id = R.string.to_pay) + toPay)
             }
@@ -157,10 +129,22 @@ fun TicketsGroups(navController: NavController, viewModel: TicketViewModel){
                     onDismiss = { confirmAlertIsVisible = false } ,
                     onConfirm = {
                         confirmAlertIsVisible = false
+                        viewModel.buyTickets(ticketCount.value, selectedValue._id)
 
                     }
                 )
             }
+        }
+        when(viewModel.transactionStatus){
+            DownloadType.SUCCESS -> {
+                viewModel.onSuccessfulTransaction(toPay)
+                navController.popBackStack()
+                navController.navigate("tickets_list_page/${viewModel.event}") {
+                    launchSingleTop = true
+                }
+            }
+            DownloadType.FAIL -> Log.d("WWW", "fail")
+            DownloadType.PREVIEW -> { }
         }
     }
 }

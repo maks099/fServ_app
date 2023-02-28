@@ -13,7 +13,8 @@ import com.example.fserv.ui.LoginPage
 import com.example.fserv.ui.RegisterPage
 import com.example.fserv.ui.pages.*
 import com.example.fserv.ui.theme.FservTheme
-import com.example.fserv.view_models.TicketViewModel
+import com.example.fserv.view_models.TicketsGroupsListViewModel
+import com.example.fserv.view_models.TicketsListViewModel
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.gson.Gson
 
@@ -101,16 +102,36 @@ class MainActivity : ComponentActivity() {
                             }
 
                             composable(
-                                route="tickets_groups/{ticketsGroups}",
-                                arguments = listOf(navArgument("ticketsGroups"){
-                                    type = TicketGroupContainerArgType()
-                                })
+                                route="tickets_groups/{event}/{ticketsGroups}",
+                                arguments = listOf(
+                                    navArgument("event"){
+                                        type = EventArgType()
+                                    },
+                                    navArgument("ticketsGroups"){
+                                        type = TicketGroupContainerArgType()
+                                    }
+                                )
                             ) { navBackStackEntry->
+                                val event = navBackStackEntry.arguments?.getString("event")?.let { Gson().fromJson(it, Event::class.java) }
                                 val ticketGroup = navBackStackEntry.arguments?.getString("ticketsGroups")?.let { Gson().fromJson(it, TicketsGroupsContainer::class.java) }
-                                if (ticketGroup != null) {
+                                if (ticketGroup != null && event != null) {
                                     TicketsGroups(
                                         navController = navController,
-                                        viewModel = TicketViewModel(ticketGroup.list)
+                                        viewModel = TicketsGroupsListViewModel(ticketsGroups = ticketGroup.list, event = event)
+                                    )
+                                }
+                            }
+
+                            composable(
+                                route="tickets_list_page/{event}",
+                                arguments = listOf(navArgument("event"){
+                                    type = EventArgType()
+                                })
+                            ) { navBackStackEntry->
+                                val event = navBackStackEntry.arguments?.getString("event")?.let { Gson().fromJson(it, Event::class.java) }
+                                if (event != null) {
+                                    TicketsListPage(
+                                        TicketsListViewModel(event)
                                     )
                                 }
                             }

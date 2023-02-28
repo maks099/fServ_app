@@ -103,8 +103,48 @@ fun PasswordTextField(
 }
 
 
+
 @Composable
-fun SubmitButton(textResourse: Int, status: Boolean, func: () -> Unit) {
+fun ClientNameTextField(
+    value: String,
+    isError: Boolean,
+    errorMsg: Int,
+    inputMessage: Int,
+    onChange: (String) -> Unit
+) {
+    Column{
+        val localFocusManager = LocalFocusManager.current
+
+        OutlinedTextField(
+            value = value,
+            isError  = isError,
+            maxLines = 1,
+            onValueChange = { onChange(it) },
+            label = { Text(stringResource(id = inputMessage)) },
+            keyboardOptions = KeyboardOptions(
+                capitalization = KeyboardCapitalization.None,
+                keyboardType = KeyboardType.Text,
+                imeAction = ImeAction.Next
+            ) ,
+            keyboardActions = KeyboardActions(
+                onNext = { localFocusManager.moveFocus(FocusDirection.Down) },
+                onDone = { localFocusManager.clearFocus() }
+            ),
+        )
+        if(isError){
+            Text(
+                text = stringResource(id = errorMsg),
+                color = MaterialTheme.colors.error,
+                style = MaterialTheme.typography.caption,
+                modifier = Modifier.padding(start = 16.dp)
+            )
+        }
+    }
+}
+
+
+@Composable
+fun SubmitButton(textResourse: Int, func: () -> Unit) {
     val localFocusManager = LocalFocusManager.current
 
     Button(
@@ -112,7 +152,6 @@ fun SubmitButton(textResourse: Int, status: Boolean, func: () -> Unit) {
             localFocusManager.clearFocus()
             func()
         },
-        enabled = status,
         modifier = Modifier
             .fillMaxWidth(0.8f)
             .height(50.dp)

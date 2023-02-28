@@ -2,6 +2,7 @@ package com.example.fserv.api
 
 import com.example.fserv.model.server.Client
 import com.example.fserv.model.server.EventResponse
+import com.example.fserv.model.server.TicketResponse
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -11,7 +12,7 @@ interface Api {
 
     @FormUrlEncoded
     @POST("registerNewClient")
-    fun registerNewClient(@Field("email") email:String, @Field("password") password: String): Call<String>
+    fun registerNewClient(@Field("email") email:String, @Field("password") password: String, @Field("firstName") firstName:String, @Field("lastName") lastName: String): Call<String>
 
     @FormUrlEncoded
     @POST("loginClient")
@@ -47,6 +48,22 @@ interface Api {
     fun getTicketGroups(@Path("eventID") eventID: String): Call<String>
     @GET("clients/{id}")
     fun getClientById(@Path("id") id: String): Call<String>
+
+    @FormUrlEncoded
+    @POST("buyTickets")
+    fun buyTickets(
+        @Field("clientId") clientId:String,
+        @Field("ticketGroupId") ticketGroupId: String,
+        @Field("countOfTickets") countOfTickets: Int,
+    ): Call<String>
+
+
+    @FormUrlEncoded
+    @POST("searchTickets")
+    suspend fun getTicketsByEvent(
+        @Field("clientId") clientId: String,
+        @Field("eventId") eventId: String,
+        @Field("page") page: Int): TicketResponse
 
 
 

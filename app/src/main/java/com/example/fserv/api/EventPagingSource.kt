@@ -7,11 +7,7 @@ import com.example.fserv.model.server.Event
 import com.example.fserv.model.app.SearchOptions
 
 
-private val TMDB_STARTING_PAGE_INDEX: Int = 1
-const val TAG = "FlickrResponsePagingSource"
-enum class REQUEST_TYPE {events, search}
-
-
+private const val TAG = "FlickrResponsePagingSource"
 
 class EventPagingSource(private val api: Api , val options: SearchOptions) :
     PagingSource<Int, Event>() {

@@ -36,9 +36,9 @@ fun HorizontalNumberPicker(
         PickerButton(
             size = height,
             drawable = R.drawable.baseline_arrow_back_ios_new_24,
-            enabled = default.value > min,
+            enabled = default.value > 1,
             onClick = {
-                if (default.value > min) default.value--
+                if (default.value > 1) default.value--
                 onValueChange(default.value)
             }
         )

@@ -16,8 +16,8 @@
     <string name="login">Login</string>
     <string name="registration">Create account</string>
 
-    <string name="enter_email">Enter email</string>
-    <string name="enter_password">Enter password</string>
+    <string name="enter_email">Email</string>
+    <string name="enter_password">Password</string>
     <string name="verification_confirm">Verification of confirmation</string>
     <string name="names">Names</string>
     <string name="search_by">Search by</string>
@@ -49,6 +49,10 @@
     <string name="error">Error</string>
     <string name="payment_confirmation">You confirm the execution of this transaction?</string>
     <string name="confirmation">Confirmation</string>
+    <string name="input_first_name">First Name</string>
+    <string name="name_length_error">this value must be at least three characters</string>
+    <string name="input_last_name">Last Name</string>
+    <string name="ticketsFor">"Tickets for: "</string>
 
 
 </resources>

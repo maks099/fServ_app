@@ -45,7 +45,7 @@ class DataRepository {
     }
 
     fun registerNewUser(userData: Client): Call<String> {
-        return api.registerNewClient(userData.email, userData.password)
+        return api.registerNewClient(userData.email, userData.password, userData.firstName, userData.lastName)
     }
 
     fun loginClient(userData: Client): Call<String> {

@@ -18,7 +18,7 @@ class EventViewModel : ViewModel() {
 
     var actionButtonStatus by mutableStateOf(true)
     var downloadType by mutableStateOf(DownloadType.PREVIEW)
-    var ticketsGroups = arrayOf<TicketGroup>()
+    var ticketsGroups :Array<TicketGroup> = arrayOf<TicketGroup>()
     val repository = TicketRepository.get()
 
 
@@ -27,13 +27,15 @@ class EventViewModel : ViewModel() {
             .enqueue(
                 object : Callback<String> {
                     override fun onResponse(call: Call<String> , response: Response<String>) {
-                        downloadType.message = response.body().toString()
-                        ticketsGroups = Gson().fromJson(
-                            downloadType.message,
-                            Array<TicketGroup>::class.java
-                        )
-                        Log.d("TTTT", ticketsGroups[0].name)
-                        downloadType = DownloadType.SUCCESS
+                        if(response.isSuccessful){
+                            downloadType.message = response.body().toString()
+                            ticketsGroups = Gson().fromJson(
+                                downloadType.message,
+                                Array<TicketGroup>::class.java
+                            )
+                            downloadType = DownloadType.SUCCESS
+                        }
+
                     }
 
                     override fun onFailure(call: Call<String> , t: Throwable) {
