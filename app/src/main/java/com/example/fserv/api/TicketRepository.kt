@@ -3,7 +3,10 @@ package com.example.fserv.api
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import com.example.fserv.model.app.SearchOptions
+import okhttp3.ResponseBody
 import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class TicketRepository {
 
@@ -31,6 +34,10 @@ class TicketRepository {
             TicketPagingSource(api = api, clientId = mainRepository.getClient()._id, eventId = eventId)
         }
     ).flow
+
+    fun downloadTicket(ticketId: String): Call<ResponseBody>{
+        return api.downloadTicket(ticketId)
+    }
 
     companion object {
         private var INSTANCE: TicketRepository? = null

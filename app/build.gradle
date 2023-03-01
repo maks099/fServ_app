@@ -85,6 +85,7 @@ dependencies {
 
     implementation 'com.google.maps.android:maps-compose:2.11.0'
     implementation 'com.google.android.gms:play-services-maps:18.1.0'
+    api group: 'commons-io', name: 'commons-io', version: '2.6'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

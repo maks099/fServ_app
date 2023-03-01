@@ -1,9 +1,11 @@
 package com.example.fserv.api
 
-import com.example.fserv.model.server.Client
 import com.example.fserv.model.server.EventResponse
 import com.example.fserv.model.server.TicketResponse
+import okhttp3.Response
+import okhttp3.ResponseBody
 import retrofit2.Call
+import retrofit2.Callback
 import retrofit2.http.*
 
 
@@ -65,6 +67,8 @@ interface Api {
         @Field("eventId") eventId: String,
         @Field("page") page: Int): TicketResponse
 
-
+    @Streaming
+    @GET("downloadTicket/{ticketId}")
+    fun downloadTicket(@Path("ticketId") ticketId: String): Call<ResponseBody>
 
 }

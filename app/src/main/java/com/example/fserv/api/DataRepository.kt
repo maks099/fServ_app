@@ -5,9 +5,13 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import com.example.fserv.model.app.SearchOptions
 import com.example.fserv.model.server.Client
-import retrofit2.*
+import com.google.gson.GsonBuilder
+import retrofit2.Call
+import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
+import retrofit2.create
+
 
 const val NETWORK_PAGE_SIZE = 25
 class DataRepository {
@@ -36,10 +40,15 @@ class DataRepository {
 
     public val api: Api
     init {
+
+        val gson = GsonBuilder()
+            .setLenient()
+            .create()
+
         val retrofit = Retrofit.Builder()
             .baseUrl("http://10.0.2.2:3000/")// https://fserv-api.onrender.com/
             .addConverterFactory(ScalarsConverterFactory.create())
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
         api = retrofit.create<Api>()
     }

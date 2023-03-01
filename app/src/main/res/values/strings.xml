@@ -53,6 +53,8 @@
     <string name="name_length_error">this value must be at least three characters</string>
     <string name="input_last_name">Last Name</string>
     <string name="ticketsFor">"Tickets for: "</string>
+    <string name="open_ticket_file">Open file</string>
+    <string name="share_ticket_file">Share file</string>
 
 
 </resources>
