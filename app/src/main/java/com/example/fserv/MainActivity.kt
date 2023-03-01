@@ -49,16 +49,17 @@ class MainActivity : ComponentActivity() {
                             composable(
                                 "login_page/{login}",
                                 arguments = listOf(navArgument("login") { type = NavType.StringType; defaultValue = "" })
-                            ){
-                                    backStackEntry -> LoginPage(navController = navController, application = application, backStackEntry.arguments?.getString("login"))
+                            ){ backStackEntry -> LoginPage(navController = navController, application = application, backStackEntry.arguments?.getString("login")) }
 
-                            }
+                            composable(
+                                "main_page",
+                                content = {
+                                    MainScreenView(navController = navController)
+                                }
+                            )
                             composable(
                                 "login_page"
-                            ){
-                                    _ -> LoginPage(navController = navController, application = application)
-
-                            }
+                            ){ _ -> LoginPage(navController = navController, application = application) }
                             composable(
                                 "register_page",
                                 content = {
@@ -77,14 +78,7 @@ class MainActivity : ComponentActivity() {
                                     )
                                 }
                             )
-                            composable(
-                                "events_page",
-                                content = {
-                                    EventsPage(
-                                        navController = navController
-                                    )
-                                }
-                            )
+
 
                             composable(
                                 route="event_page/{event}",

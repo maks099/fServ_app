@@ -92,5 +92,18 @@ class EventsListViewModel : ViewModel() {
 
     }
 
+    companion object {
+        private var INSTANCE: EventsListViewModel? = null
+        fun initialize() {
+            if (INSTANCE == null) {
+                INSTANCE = EventsListViewModel()
+            }
+        }
+        fun get(): EventsListViewModel {
+            return INSTANCE ?:
+            throw IllegalStateException("Repository must be initialized")
+        }
+    }
+
 
 }

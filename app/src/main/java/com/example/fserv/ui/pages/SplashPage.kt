@@ -47,7 +47,7 @@ fun SplashPage(navController: NavController) {
                 delay(1000)
             }
 
-            val nextDestination = if(viewModel.isUserLogged) "events_page" else  "login_page"
+            val nextDestination = if(viewModel.isUserLogged) "main_page" else  "login_page"
             navController.navigate(nextDestination) {
                 popUpTo("splash_page") {
                     inclusive = true

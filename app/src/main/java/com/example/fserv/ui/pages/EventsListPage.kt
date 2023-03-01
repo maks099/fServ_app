@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.selection.selectable
@@ -28,7 +29,9 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import coil.compose.AsyncImage
@@ -55,10 +58,10 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
 private lateinit var dialogState: MutableState<Boolean>
 private lateinit var viewModel: EventsListViewModel
-
 @Composable
-fun EventsPage(navController: NavController){
-    viewModel = viewModel()
+fun EventsPage(navController: NavController,  state: LazyListState, events: LazyPagingItems<Event>,
+               onEventCardClick: (Event) -> Unit){
+    viewModel = EventsListViewModel.get()
 
     dialogState = remember {
         mutableStateOf(false)
@@ -81,8 +84,8 @@ fun EventsPage(navController: NavController){
                 )
         ) {
             Column {
-                SearchPanel(viewModel.searchTerm,
-                    { viewModel.updateSearch(it) })
+                SearchPanel(viewModel,viewModel.searchTerm,
+                    { viewModel.updateSearch(it) }, )
 
 
                 LazyRow {
@@ -102,7 +105,6 @@ fun EventsPage(navController: NavController){
                 }
 
 
-                val events = viewModel.getEvents().collectAsLazyPagingItems()
                 val isRefreshing by viewModel.isRefreshing.collectAsState()
 
                 //Log.d(TAG, "events are downloaded ${events.itemCount}")
@@ -117,6 +119,7 @@ fun EventsPage(navController: NavController){
 
 
                     LazyColumn (
+                        state = state,
                         modifier = Modifier
                             .fillMaxHeight()
                             .fillMaxWidth()
@@ -124,7 +127,8 @@ fun EventsPage(navController: NavController){
 
                         items(events) { event ->
                             if (event != null) {
-                                EventCard(event = event, navController = navController)
+                                EventCard(event = event, navController = navController,
+                                onEventCardClick = { onEventCardClick(event) })
                             }
                         }
 
@@ -174,7 +178,8 @@ fun EventsPage(navController: NavController){
 
 
 @Composable
-fun EventCard(event: Event , navController: NavController){
+fun EventCard(event: Event , navController: NavController,
+onEventCardClick: (Event) -> Unit){
     Card(
         elevation = 10.dp,
         shape = RoundedCornerShape(10.dp),
@@ -184,9 +189,7 @@ fun EventCard(event: Event , navController: NavController){
                 vertical = 8.dp
             )
             .clickable {
-                navController.navigate("event_page/${event}") {
-                    launchSingleTop = true
-                }
+                onEventCardClick(event)
             },
 
     ) {
@@ -221,7 +224,7 @@ fun EventCard(event: Event , navController: NavController){
 
 @Composable
 fun SearchPanel(
-
+    viewModel: EventsListViewModel,
     value: String,
     onChange: (String) -> Unit
 ){
@@ -260,7 +263,10 @@ fun SearchPanel(
                 Column {
                     SearchBlock()
                     SortBlock()
-                    FilterBlock()
+                    FilterBlock(
+                        isCheckedFunc = {viewModel.filters.contains(it) },
+                        addFilter = { viewModel.filters += it },
+                    )
                 }
             },
             buttons = {}
@@ -332,7 +338,10 @@ fun SortBlock(){
 
 
 @Composable
-fun FilterBlock(){
+fun FilterBlock(
+    isCheckedFunc: (FilterType) -> Boolean,
+    addFilter: (FilterType) -> Unit
+){
     Text(text = stringResource(id = R.string.sort_by))
     FilterType.values().forEach { item ->
         Row(
@@ -345,13 +354,13 @@ fun FilterBlock(){
 //                )
                 .padding(8.dp)
         ) {
-            val isChecked = viewModel.filters.contains(item)
+            val isChecked = isCheckedFunc(item)
 
             Checkbox(
                 checked = isChecked,
                 onCheckedChange = {
                                   if(it){
-                                      viewModel.filters += item
+                                      addFilter(item)
 
                                   } else {
                                       viewModel.filters -= item
