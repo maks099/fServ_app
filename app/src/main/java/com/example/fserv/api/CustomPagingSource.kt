@@ -4,32 +4,28 @@ import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.fserv.model.server.Event
-import com.example.fserv.model.app.SearchOptions
 import com.example.fserv.model.server.EventResponse
+import com.example.fserv.model.server.myInfo
+import com.example.fserv.model.server.myInfoResponse
+
 
 
 private const val TAG = "FlickrResponsePagingSource"
 
-class EventPagingSource(private val api: Api , val options: SearchOptions) :
+class CustomPagingSource(private val api: Api) :
     PagingSource<Int, Event>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Event> {
         return try {
+
             val page = params.key ?: 0
-            val response: EventResponse = api.searchEvents(
-                    searchTerm = options.searchTerm,
-                    searchType = options.searchType.toString(),
-                    sortType = options.sortType.subName,
-                    sortValue = options.sortType.item,
-                    category = options.pickedCategory.code,
-                    filters = options.stringifyFilters(),
-                    page = page,
-                    userId = options.userID
-                )
+            val response: EventResponse =  api.getActivities(
+                clientId = DataRepository.get().getClient()._id,
+                page = page
+            )
 
-
+            Log.d("ActivityPagingSource", "page $page" )
             Log.d(TAG, response.toString())
-
 
             LoadResult.Page(
                 data = response.events,

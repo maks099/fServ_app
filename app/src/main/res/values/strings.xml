@@ -55,6 +55,8 @@
     <string name="ticketsFor">"Tickets for: "</string>
     <string name="open_ticket_file">Open file</string>
     <string name="share_ticket_file">Share file</string>
+    <string name="on_your_account">On your\naccount</string>
+    <string name="currency_short">grn.</string>
 
 
 </resources>

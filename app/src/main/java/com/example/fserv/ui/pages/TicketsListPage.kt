@@ -121,15 +121,6 @@ fun TicketsListPage(viewModel1: TicketsListViewModel) {
 }
 
 
-@Preview(showBackground = true)
-@Composable
-private fun TicketGardPreview(){
-    val ticket = Ticket("_id", "eventId");
-    TicketCard(
-        index = 1 ,
-        ticket = ticket
-    )
-}
 
 
 @Composable

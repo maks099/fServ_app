@@ -24,6 +24,15 @@ public data class Event(
 ):Parcelable{
     override fun toString(): String = Uri.encode(Gson().toJson(this))
 }
+@Parcelize
+class myInfo(
+    val _id: String,
+    val name: String = "hello",
+    val gallery: List<String>
+) :Parcelable
+data class myInfoResponse(
+    val tickets: List<myInfo>
+)
 
 class EventArgType : JsonNavType<Event>() {
     override fun fromJsonParse(value: String): Event = Gson().fromJson(value, Event::class.java)
@@ -47,6 +56,9 @@ abstract class JsonNavType<T> : NavType<T>(isNullableAllowed = false) {
     }
 }
 
+
+
 data class EventResponse(
     val events: List<Event>
 )
+

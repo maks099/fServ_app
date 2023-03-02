@@ -1,11 +1,11 @@
 package com.example.fserv.api
 
+import com.example.fserv.model.app.SortType
 import com.example.fserv.model.server.EventResponse
 import com.example.fserv.model.server.TicketResponse
-import okhttp3.Response
+import com.example.fserv.model.server.myInfoResponse
 import okhttp3.ResponseBody
 import retrofit2.Call
-import retrofit2.Callback
 import retrofit2.http.*
 
 
@@ -31,12 +31,12 @@ interface Api {
     @FormUrlEncoded
     @POST("searchEvents")
     suspend fun searchEvents(
-        @Field("searchTerm") searchTerm: String,
-        @Field("searchType") searchType: String,
-        @Field("sortType") sortType: String,
-        @Field("category") category: Int,
-        @Field("sortValue") sortValue: Any,
-        @Field("filters") filters: String,
+        @Field("searchTerm") searchTerm: String = "",
+        @Field("searchType") searchType: String = "",
+        @Field("sortType") sortType: String = "",
+        @Field("category") category: Int = -1,
+        @Field("sortValue") sortValue: Any = "",
+        @Field("filters") filters: String = "",
         @Field("userId") userId: String,
         @Field("page") page: Int = 0): EventResponse
 
@@ -70,5 +70,10 @@ interface Api {
     @Streaming
     @GET("downloadTicket/{ticketId}")
     fun downloadTicket(@Path("ticketId") ticketId: String): Call<ResponseBody>
+
+
+    @GET("getActivities/{clientId}/{page}")
+    suspend fun getActivities(@Path("clientId") clientId: String,
+                      @Path("page") page: Int): EventResponse
 
 }

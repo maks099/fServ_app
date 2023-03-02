@@ -63,6 +63,23 @@ class TicketsListViewModel(val event: Event): ViewModel() {
         }
     }
 
+    companion object {
+        private var INSTANCE: TicketsListViewModel? = null
+        fun initialize() {
+            if (INSTANCE == null) {
+                INSTANCE = TicketsListViewModel(
+                    Event("63f64979dd5dba24d70ef0d1", "", "", "", 0.0, 0.0, "", false,
+                    "", listOf(), listOf()
+                    )
+                )
+            }
+        }
+        fun get(): TicketsListViewModel {
+            return INSTANCE ?:
+            throw IllegalStateException("Repository must be initialized")
+        }
+    }
+
      fun getPdfFromResponse(responseBody: Response<ResponseBody>, next: () -> Unit){
         try {
             val fileOutputStream = FileOutputStream(myFile)
