@@ -1,9 +1,8 @@
 package com.example.fserv.api
 
-import com.example.fserv.model.app.SortType
 import com.example.fserv.model.server.EventResponse
 import com.example.fserv.model.server.TicketResponse
-import com.example.fserv.model.server.myInfoResponse
+import com.example.fserv.model.server.UserActivityResponse
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
@@ -48,7 +47,7 @@ interface Api {
 
     @GET("ticketsGroups/{eventID}")
     fun getTicketGroups(@Path("eventID") eventID: String): Call<String>
-    @GET("clients/{id}")
+    @GET("getClientById/{id}")
     fun getClientById(@Path("id") id: String): Call<String>
 
     @FormUrlEncoded
@@ -74,6 +73,16 @@ interface Api {
 
     @GET("getActivities/{clientId}/{page}")
     suspend fun getActivities(@Path("clientId") clientId: String,
-                      @Path("page") page: Int): EventResponse
+                      @Path("page") page: Int): UserActivityResponse
+
+    @FormUrlEncoded
+    @POST("resetClientPassword")
+    fun resetClientPassword( @Field("email") email: String): Call<String>
+
+    @FormUrlEncoded
+    @POST("getUserBilling")
+    fun getUserBilling(
+        @Field("clientId") clientId: String
+    ): Call<String>
 
 }

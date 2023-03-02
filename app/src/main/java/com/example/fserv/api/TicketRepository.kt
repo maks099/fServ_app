@@ -16,7 +16,7 @@ class TicketRepository {
 
     fun buyTickets(ticketGroupId: String, countOfTickets: Int): Call<String>{
         return api.buyTickets(
-            clientId = mainRepository.getClient()._id,
+            clientId = mainRepository.userId,
             ticketGroupId = ticketGroupId,
             countOfTickets = countOfTickets
         )
@@ -28,17 +28,17 @@ class TicketRepository {
             enablePlaceholders = false
         ) ,
         pagingSourceFactory = {
-            TicketPagingSource(api = api, clientId = mainRepository.getClient()._id, eventId = eventId)
+            TicketPagingSource(api = api, clientId = mainRepository.userId, eventId = eventId)
         }
     ).flow
 
-    fun getCustomMyInfo() = Pager(
+    fun getUserActivities() = Pager(
         config = PagingConfig(
             pageSize = 100,
             enablePlaceholders = false
         ) ,
         pagingSourceFactory = {
-            CustomPagingSource(api = api)
+            UserActivitiesPagingSource(api = api)
         }
     ).flow
 

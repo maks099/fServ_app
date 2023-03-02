@@ -14,7 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -144,20 +143,22 @@ fun ClientNameTextField(
 
 
 @Composable
-fun SubmitButton(textResourse: Int, func: () -> Unit) {
+fun SubmitButton(
+    textResource: Int,
+    enabled: Boolean = true,
+    onClick: () -> Unit) {
     val localFocusManager = LocalFocusManager.current
-
     Button(
         onClick = {
             localFocusManager.clearFocus()
-            func()
+            onClick()
         },
         modifier = Modifier
             .fillMaxWidth(0.8f)
             .height(50.dp)
     ) {
         Text(
-            text = stringResource(id = textResourse),
+            text = stringResource(id = textResource),
             fontSize = 20.sp
         )
     }

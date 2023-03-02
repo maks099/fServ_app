@@ -23,7 +23,7 @@ import java.io.FileOutputStream
 import java.io.IOException
 
 
-class TicketsListViewModel(val event: Event): ViewModel() {
+class TicketsListViewModel(val eventId: String): ViewModel() {
 
     var isRefreshing = MutableStateFlow(false)
     private val repo = TicketRepository.get()
@@ -31,7 +31,7 @@ class TicketsListViewModel(val event: Event): ViewModel() {
 
     fun getTickets(): Flow<PagingData<Ticket>> =
         repo.getTickets(
-            eventId = event._id
+            eventId = eventId
         ).cachedIn(viewModelScope)
 
     fun checkTicketExisting(ticketId: String , next: () -> Unit){
@@ -63,22 +63,6 @@ class TicketsListViewModel(val event: Event): ViewModel() {
         }
     }
 
-    companion object {
-        private var INSTANCE: TicketsListViewModel? = null
-        fun initialize() {
-            if (INSTANCE == null) {
-                INSTANCE = TicketsListViewModel(
-                    Event("63f64979dd5dba24d70ef0d1", "", "", "", 0.0, 0.0, "", false,
-                    "", listOf(), listOf()
-                    )
-                )
-            }
-        }
-        fun get(): TicketsListViewModel {
-            return INSTANCE ?:
-            throw IllegalStateException("Repository must be initialized")
-        }
-    }
 
      fun getPdfFromResponse(responseBody: Response<ResponseBody>, next: () -> Unit){
         try {

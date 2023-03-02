@@ -64,33 +64,34 @@ fun BottomNavigationPanel(navController: NavController) {
 @Composable
 fun NavigationGraph(navController: NavController,
                     bottomNavHost: NavHostController) {
-  //  val eventsListState = rememberLazyListState()
+    val eventsListState = rememberLazyListState()
     val activityListState = rememberLazyListState()
 
     EventsListViewModel.initialize()
-    TicketsListViewModel.initialize()
+    ActivitiesListViewModel.initialize()
 
-    val activities = TicketsListViewModel.get().getTickets().collectAsLazyPagingItems()
+    val activities = ActivitiesListViewModel.get().getCustomInfos().collectAsLazyPagingItems()
+    val events = EventsListViewModel.get().getEvents().collectAsLazyPagingItems()
 
- //   val listViewModel: EventsListViewModel = EventsListViewModel.get()
-    val activitiesViewModel: TicketsListViewModel = TicketsListViewModel.get()
-
-   //// val events = listViewModel.getEvents().collectAsLazyPagingItems()
-
-    NavHost(navController = bottomNavHost, startDestination = BottomNavItem.Account.screen_route) {
-        /*composable(BottomNavItem.Events.screen_route) {
+    NavHost(navController = bottomNavHost, startDestination = BottomNavItem.Events.screen_route) {
+        composable(BottomNavItem.Events.screen_route) {
             EventsPage(navController, eventsListState, events,
                 onEventCardClick = {
                     navController.navigate("event_page/${it}") {
                         launchSingleTop = true
                     }
             })
-        }*/
+        }
         composable(BottomNavItem.Account.screen_route) {
             AccountPage(
                 navController,
                 activityListState = activityListState,
-                activities
+                activities,
+                onUserActivityClick = {
+                    navController.navigate("tickets_list_page/${it._id}") {
+                        launchSingleTop = true
+                    }
+                }
             )
         }
     }

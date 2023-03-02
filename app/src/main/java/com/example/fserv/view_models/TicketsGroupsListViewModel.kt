@@ -1,5 +1,6 @@
 package com.example.fserv.view_models
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -18,6 +19,30 @@ class TicketsGroupsListViewModel(val ticketsGroups: List<TicketGroup>, val event
     private val repo = TicketRepository.get()
     private val dataRepo = DataRepository.get()
     var transactionStatus by mutableStateOf(DownloadType.PREVIEW)
+    var account by mutableStateOf(-1)
+
+    init {
+        dataRepo.getUserBilling().enqueue(
+            object : Callback<String>{
+                override fun onResponse(call: Call<String> , response: Response<String>) {
+                    when(response.isSuccessful){
+                        true -> response.body()?.let {
+                            try {
+                                account = Integer.parseInt(it)
+                            } catch (ex: java.lang.NumberFormatException){
+                                ex.printStackTrace()
+                            }
+                        }
+                        false -> {}
+                    }
+                }
+
+                override fun onFailure(call: Call<String> , t: Throwable) {
+                    Log.d("ERROR", t.message.toString())
+                }
+            }
+        )
+    }
 
     fun buyTickets(countOfTickets: Int, ticketGroupId: String){
         repo.buyTickets(ticketGroupId, countOfTickets)
@@ -39,14 +64,6 @@ class TicketsGroupsListViewModel(val ticketsGroups: List<TicketGroup>, val event
             )
     }
 
-    fun updateClientAccount(toPay: Int) {
-
-    }
-
-    fun getClientAccount(): Int = dataRepo.getClient().account
-    fun onSuccessfulTransaction(toPay: Int) {
-        DataRepository.get().getClient().account -= toPay
-    }
 
 
 }

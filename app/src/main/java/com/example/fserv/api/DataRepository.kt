@@ -15,32 +15,16 @@ import retrofit2.create
 
 const val NETWORK_PAGE_SIZE = 25
 class DataRepository {
-   private var client: Client = Client()
 
+    var userId: String = ""
 
-    fun updateUserId(newUserId: String){
-        client._id = newUserId
-    }
-
-    fun updateClient(client: Client){
-        this.client = client
-    }
-
-    fun getClient(): Client {
-        return client
-    }
-
-    fun getClientFromServer(): Call<String>{
-        Log.d("EEEeee", client._id)
-        return api.getClientById(client._id)
-    }
+    fun resetClientPassword(email: String): Call<String> = api.resetClientPassword(email)
 
 
 
 
     public val api: Api
     init {
-
         val gson = GsonBuilder()
             .setLenient()
             .create()
@@ -59,6 +43,11 @@ class DataRepository {
 
     fun loginClient(userData: Client): Call<String> {
         return api.loginClient(userData.email, userData.password)
+    }
+
+    fun getUserBilling(): Call<String> {
+        Log.d("Get billing id", userId)
+        return api.getUserBilling(userId)
     }
 
     fun confirmAccount(token: String): Call<String> {

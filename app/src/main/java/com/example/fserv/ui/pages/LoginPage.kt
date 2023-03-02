@@ -208,7 +208,7 @@ fun LoginPage(navController: NavController , application: Application, login: St
 
 
                             Spacer(modifier = Modifier.padding(5.dp))
-                            /*TextButton(onClick = {
+                            TextButton(onClick = {
 
                                 navController.navigate("reset_page") {
                                     popUpTo(navController.graph.startDestinationId){
@@ -223,7 +223,7 @@ fun LoginPage(navController: NavController , application: Application, login: St
                                     letterSpacing = 1.sp ,
                                     style = MaterialTheme.typography.caption ,
                                 )
-                            }*/
+                            }
                             Spacer(modifier = Modifier.padding(20.dp))
                         }
                     }

@@ -22,9 +22,11 @@ class SplashViewModel: ViewModel() {
         viewModelScope.launch {
             preferencesRepository.userID.collectLatest {
                 userId ->
-                val id = userId.replace("^\"|\"$", "")
-                Log.d("AAAAA", id)
-                DataRepository.get().updateUserId(id)
+                val id = userId.replace("\"", "")
+                Log.d("CLIENTid", id)
+                DataRepository.get().userId = id
+                Log.d("CLIENTid22222", DataRepository.get().userId)
+
                 isUserLogged = userId.isNotEmpty()
                 isFinish = true
             }

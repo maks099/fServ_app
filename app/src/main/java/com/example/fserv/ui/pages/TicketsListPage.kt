@@ -36,11 +36,7 @@ private lateinit var viewModel: TicketsListViewModel
 fun TicketsListPage(viewModel1: TicketsListViewModel) {
     viewModel = viewModel1
     Scaffold(
-        topBar = {
-            TopAppBar {
-                Text("${stringResource(id = R.string.ticketsFor)} ${viewModel.event.name}")
-            }
-        }
+
     ) { paddingValues ->
         Box(
             modifier = Modifier

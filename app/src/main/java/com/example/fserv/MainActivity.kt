@@ -69,6 +69,15 @@ class MainActivity : ComponentActivity() {
                                     )
                                 }
                             )
+
+                            composable(
+                                "reset_page",
+                                content = {
+                                    ResetPage(
+                                        navController = navController
+                                    )
+                                }
+                            )
                             composable(
                                 "confirm_page",
                                 content = {
@@ -117,15 +126,15 @@ class MainActivity : ComponentActivity() {
                             }
 
                             composable(
-                                route="tickets_list_page/{event}",
-                                arguments = listOf(navArgument("event"){
-                                    type = EventArgType()
+                                route="tickets_list_page/{eventID}",
+                                arguments = listOf(navArgument("eventID"){
+                                    type = NavType.StringType
                                 })
                             ) { navBackStackEntry->
-                                val event = navBackStackEntry.arguments?.getString("event")?.let { Gson().fromJson(it, Event::class.java) }
-                                if (event != null) {
+                                val eventId = navBackStackEntry.arguments?.getString("eventID")
+                                if (eventId != null) {
                                     TicketsListPage(
-                                        TicketsListViewModel(event)
+                                        TicketsListViewModel(eventId)
                                     )
                                 }
                             }

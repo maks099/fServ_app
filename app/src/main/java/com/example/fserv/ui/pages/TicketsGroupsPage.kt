@@ -109,8 +109,9 @@ fun TicketsGroups(navController: NavController, viewModel: TicketsGroupsListView
             )
 
             Button(onClick = {
-                val clientAccount = viewModel.getClientAccount()
-                if (toPay > clientAccount) {
+                             Log.d("ACCOUNT", viewModel.account.toString())
+
+                if (toPay > viewModel.account) {
                     errorAlertIsVisible = true
 
                 } else {
@@ -137,9 +138,8 @@ fun TicketsGroups(navController: NavController, viewModel: TicketsGroupsListView
         }
         when(viewModel.transactionStatus){
             DownloadType.SUCCESS -> {
-                viewModel.onSuccessfulTransaction(toPay)
                 navController.popBackStack()
-                navController.navigate("tickets_list_page/${viewModel.event}") {
+                navController.navigate("tickets_list_page/${viewModel.event._id}") {
                     launchSingleTop = true
                 }
             }
