@@ -38,7 +38,12 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data
                     android:host="localhost"
-                    android:scheme="http" />
+                    android:scheme="http"
+                    android:pathPattern="/confirmAccount/.*"/>
+                <data
+                    android:host="localhost"
+                    android:scheme="http"
+                    android:pathPattern="/resetPassword/.*"/>
             </intent-filter>
         </activity>
 

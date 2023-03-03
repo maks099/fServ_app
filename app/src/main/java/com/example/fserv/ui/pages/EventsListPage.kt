@@ -196,9 +196,7 @@ onEventCardClick: (Event) -> Unit){
         Row (
             verticalAlignment = Alignment.CenterVertically
         ){
-            Log.d(TAG, "${event.name} ")
             val imagePath = "https://fserv.onrender.com/photo/" + event.gallery.first()
-            Log.d(TAG, imagePath)
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(imagePath)

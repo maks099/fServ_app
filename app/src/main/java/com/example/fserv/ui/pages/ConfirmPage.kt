@@ -1,14 +1,14 @@
 package com.example.fserv.ui.pages
 
-import android.util.Log
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import com.example.fserv.R
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,98 +17,94 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.fserv.view_models.AuthorizationViewModel
-import com.example.fserv.view_models.ConfirmViewModel
-import com.google.accompanist.insets.navigationBarsWithImePadding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-@Preview
+
 @Composable
-fun ConfirmPageWrapper(){
-    ConfirmPage(
-        navController = rememberNavController(),
-        token = "123token123"
-    )
-}
-const val TAG = "ConfirmPage"
-@Composable
-fun ConfirmPage(navController: NavController, token: String){
-    val viewModel: ConfirmViewModel = viewModel()
+fun ConfirmPage(navController: NavController, viewModel: AuthorizationViewModel, token: String){
     val scaffoldState: ScaffoldState = rememberScaffoldState()
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
+    val isConfirming = rememberSaveable{ mutableStateOf(true) }
     val context = LocalContext.current
 
     Scaffold(scaffoldState = scaffoldState) {
         padding ->
-        Box(modifier = Modifier
+        Box(modifier =Modifier
             .fillMaxWidth()
             .fillMaxHeight()
             .padding(padding),
             contentAlignment = Alignment.Center,
         ) {
             Column(
-                modifier = Modifier
+                modifier =Modifier
                     .padding(16.dp)
                     .fillMaxWidth()
                     .verticalScroll(rememberScrollState()) ,
-
                 horizontalAlignment = Alignment.CenterHorizontally,
 
-
             ) {
-                CircularProgressIndicator(
-                    modifier = Modifier
-                        .width(200.dp)
-                        .height(200.dp),
-                    color = Color.Green ,
-                    strokeWidth = 10.dp ,
-                )
+                if(isConfirming.value){
+                    Column {
+                        CircularProgressIndicator(
+                            modifier =Modifier
+                                .width(200.dp)
+                                .height(200.dp),
+                            color = Color.Green ,
+                            strokeWidth = 10.dp ,
+                        )
+                        Text(stringResource(id=R.string.check_in_progress))
+                    }
+                } else {
+                    Text(stringResource(id=R.string.error))
+                }
+
+
                 Spacer(modifier = Modifier.height(20.dp))
-                Spacer(modifier = Modifier.height(200.dp))
-                viewModel.confirmAccount(token).enqueue(
-                    object : Callback<String> {
-                        override fun onFailure(call: Call<String> , t: Throwable) {
-                            showSnackbar("${context.getText(R.string.server_error)} ${t.message.toString()}")
-                        }
-
-                        override fun onResponse(
-                            call: Call<String> , response: Response<String>
-                        ) {
-                            response.body()?.let { viewModel.setUserID(it) }
-                            if (response.isSuccessful) {
-                                navController.navigate("events_page") {
-                                    popUpTo(navController.graph.startDestinationId){
-                                        inclusive = true
-                                    }
-                                    launchSingleTop = true
-                                }
-                            } else showSnackbar(
-                                "${context.getText(R.string.server_error)} ${
-                                    response.errorBody()?.string().toString()
-                                }"
+                fun showSnackbar(
+                    code: Int ,
+                    message: String ,
+                    onExit: () -> Unit = {}
+                ) {
+                    coroutineScope.launch {
+                        val snackbarResult =
+                            scaffoldState.snackbarHostState.showSnackbar(
+                                message = "${context.getText(code)} $message" ,
+                                actionLabel = context.getText(R.string.close_caps)
+                                    .toString()
                             )
-
-                        }
-
-                        fun showSnackbar(message: String) {
-                            coroutineScope.launch {
-                                scaffoldState.snackbarHostState.showSnackbar(
-                                    message = message ,
-                                    actionLabel = context.getText(R.string.close_caps)
-                                        .toString()
-                                )
-                            }
+                        when (snackbarResult) {
+                            SnackbarResult.Dismissed , SnackbarResult.ActionPerformed -> onExit()
                         }
                     }
+                }
+
+                viewModel.confirmAccount(
+                    token = token,
+                    onSuccess = {
+                        navController.navigate("main_page") {
+                            popUpTo("login_page") {
+                                inclusive = true
+                            }
+                            navController.clearBackStack("login_page")
+                            navController.clearBackStack("confirm_page")
+                        }
+                    },
+                    onFailure = {
+                        code, string ->
+                        showSnackbar(code, string)
+                        isConfirming.value = false
+                    }
                 )
+
+
             }
         }
     }

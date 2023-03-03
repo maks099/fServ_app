@@ -22,6 +22,8 @@ class ActivitiesListViewModel : ViewModel() {
     val isRefreshing = MutableStateFlow(false)
     private val ticketRepository = TicketRepository.get()
     private val dataRepo = DataRepository.get()
+    var account by mutableStateOf(-1)
+
 
     fun getCustomInfos(): Flow<PagingData<UserActivityObj>> {
         Log.d("ActivitiesListViewModel", "is")
@@ -29,7 +31,6 @@ class ActivitiesListViewModel : ViewModel() {
     }
 
 
-    var account by mutableStateOf(-1)
 
     init {
         dataRepo.getUserBilling().enqueue(

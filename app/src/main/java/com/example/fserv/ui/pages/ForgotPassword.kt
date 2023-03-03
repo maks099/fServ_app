@@ -1,7 +1,5 @@
 package com.example.fserv.ui.pages
 
-import android.content.Context
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -20,25 +18,20 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.fserv.R
 import com.example.fserv.ui.LoginTextField
-import com.example.fserv.ui.PasswordTextField
 import com.example.fserv.ui.SubmitButton
+import com.example.fserv.ui.controls.DialogBoxLoading
 import com.example.fserv.view_models.AuthorizationViewModel
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.navigationBarsWithImePadding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 @Composable
-fun ResetPage(navController: NavController) {
-    val viewModel: AuthorizationViewModel = viewModel()
+fun ForgotPasswordPage(navController: NavController, viewModel: AuthorizationViewModel) {
     val scaffoldState: ScaffoldState = rememberScaffoldState()
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
 
@@ -53,7 +46,6 @@ fun ResetPage(navController: NavController) {
                     color = Color.Transparent ,
                 )
         ) {
-            val focusManager = LocalFocusManager.current
             val mContext = LocalContext.current
 
             Box(
@@ -98,7 +90,7 @@ fun ResetPage(navController: NavController) {
                         LoginTextField(
                             value = viewModel.email ,
                             errorMsg = viewModel.emailErrorMsg ,
-                            isError = viewModel.emailError ,
+                            isError = viewModel.emailErrorMsg != -1 ,
                             onChange = { viewModel.onEmailChange(it) }
                         )
 
@@ -122,7 +114,10 @@ fun ResetPage(navController: NavController) {
                                                 .toString()
                                         )
                                     when (snackbarResult) {
-                                        SnackbarResult.Dismissed , SnackbarResult.ActionPerformed -> onExit()
+                                        SnackbarResult.Dismissed , SnackbarResult.ActionPerformed -> {
+                                            viewModel.actionButtonStatus = true
+                                            onExit()
+                                        }
                                     }
                                 }
                             }
@@ -137,7 +132,7 @@ fun ResetPage(navController: NavController) {
                             }
 
 
-                            viewModel.resetPassword(
+                            viewModel.forgotPassword(
                                 onFailure = { code , message ->
                                     showSnackbar(
                                         code ,
@@ -152,6 +147,10 @@ fun ResetPage(navController: NavController) {
                                 }
                             )
                         }
+                        if(viewModel.dialogStatus){
+                            DialogBoxLoading()
+                        }
+
 
 
                         Spacer(modifier = Modifier.padding(10.dp))

@@ -10,9 +10,10 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.fserv.model.server.*
 import com.example.fserv.ui.LoginPage
-import com.example.fserv.ui.RegisterPage
+import com.example.fserv.ui.RegistrationPage
 import com.example.fserv.ui.pages.*
 import com.example.fserv.ui.theme.FservTheme
+import com.example.fserv.view_models.AuthorizationViewModel
 import com.example.fserv.view_models.TicketsGroupsListViewModel
 import com.example.fserv.view_models.TicketsListViewModel
 import com.google.accompanist.insets.ProvideWindowInsets
@@ -46,10 +47,6 @@ class MainActivity : ComponentActivity() {
                                     )
                                 }
                             )
-                            composable(
-                                "login_page/{login}",
-                                arguments = listOf(navArgument("login") { type = NavType.StringType; defaultValue = "" })
-                            ){ backStackEntry -> LoginPage(navController = navController, application = application, backStackEntry.arguments?.getString("login")) }
 
                             composable(
                                 "main_page",
@@ -57,24 +54,41 @@ class MainActivity : ComponentActivity() {
                                     MainScreenView(navController = navController)
                                 }
                             )
+
+                            composable(
+                                "login_page/{login}",
+                                arguments = listOf(navArgument("login") { type = NavType.StringType; defaultValue = "" })
+                            ){ backStackEntry -> LoginPage(navController = navController, viewModel = AuthorizationViewModel(application), backStackEntry.arguments?.getString("login")) }
+
                             composable(
                                 "login_page"
-                            ){ _ -> LoginPage(navController = navController, application = application) }
+                            ){ _ -> LoginPage(navController = navController, viewModel = AuthorizationViewModel(application)) }
                             composable(
                                 "register_page",
                                 content = {
-                                    RegisterPage(
+                                    RegistrationPage(
                                         navController = navController,
-                                        application = application
+                                        viewModel = AuthorizationViewModel(application)
                                     )
                                 }
                             )
 
                             composable(
-                                "reset_page",
+                                "forgot_password_page",
                                 content = {
-                                    ResetPage(
-                                        navController = navController
+                                    ForgotPasswordPage(
+                                        navController = navController,
+                                        viewModel = AuthorizationViewModel(application)
+                                    )
+                                }
+                            )
+                            composable(
+                                "reset_password_page",
+                                content = {
+                                    ResetPasswordPage(
+                                        navController = navController,
+                                        viewModel = AuthorizationViewModel(application),
+                                        token = token
                                     )
                                 }
                             )
@@ -83,6 +97,7 @@ class MainActivity : ComponentActivity() {
                                 content = {
                                     ConfirmPage(
                                         navController = navController,
+                                        viewModel = AuthorizationViewModel(application),
                                         token
                                     )
                                 }
@@ -151,8 +166,14 @@ class MainActivity : ComponentActivity() {
     private fun checkForToken() {
         val uri = intent.data
         if (uri != null) {
-            val parameters: List<String> = uri.getPathSegments()
-            startDestination = "confirm_page"
+            uri.path?.let {
+               val pathParts = it.split("/")
+                when(pathParts[1]){
+                    "confirmAccount" -> startDestination = "confirm_page"
+                    "resetPassword" -> startDestination = "reset_password_page"
+                }
+            }
+            val parameters: List<String> = uri.pathSegments
             token = parameters[parameters.size - 1]
         }
     }

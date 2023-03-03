@@ -17,11 +17,12 @@ const val NETWORK_PAGE_SIZE = 25
 class DataRepository {
 
     var userId: String = ""
+    set(value) {
+        field = value.replace("\"", "")
+    }
 
-    fun resetClientPassword(email: String): Call<String> = api.resetClientPassword(email)
-
-
-
+    fun forgotPassword(email: String): Call<String> = api.forgotPassword(email)
+    fun resetPassword(token: String, newPassword: String): Call<String> = api.resetPassword(token, newPassword)
 
     public val api: Api
     init {

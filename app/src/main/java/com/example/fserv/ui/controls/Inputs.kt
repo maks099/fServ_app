@@ -145,13 +145,17 @@ fun ClientNameTextField(
 @Composable
 fun SubmitButton(
     textResource: Int,
-    enabled: Boolean = true,
+    enabled: Boolean,
     onClick: () -> Unit) {
     val localFocusManager = LocalFocusManager.current
+
     Button(
+
         onClick = {
-            localFocusManager.clearFocus()
-            onClick()
+            if(enabled){
+                localFocusManager.clearFocus()
+                onClick()
+            }
         },
         modifier = Modifier
             .fillMaxWidth(0.8f)

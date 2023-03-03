@@ -76,8 +76,15 @@ interface Api {
                       @Path("page") page: Int): UserActivityResponse
 
     @FormUrlEncoded
-    @POST("resetClientPassword")
-    fun resetClientPassword( @Field("email") email: String): Call<String>
+    @POST("forgotPassword")
+    fun forgotPassword(@Field("email") email: String): Call<String>
+
+    @FormUrlEncoded
+    @POST("resetPasswordByToken")
+    fun resetPassword(
+        @Field("token") token: String,
+        @Field("password") password: String
+    ): Call<String>
 
     @FormUrlEncoded
     @POST("getUserBilling")
