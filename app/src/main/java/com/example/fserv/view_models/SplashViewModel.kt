@@ -18,10 +18,10 @@ class SplashViewModel: ViewModel() {
     var isUserLogged by mutableStateOf(false)
     var isFinish by mutableStateOf(false)
 
-    fun checkUser() {
+    init {
         viewModelScope.launch {
             preferencesRepository.userID.collectLatest {
-                userId ->
+                    userId ->
                 val id = userId.replace("\"", "")
                 Log.d("CLIENTid", id)
                 DataRepository.get().userId = id
@@ -31,7 +31,10 @@ class SplashViewModel: ViewModel() {
                 isFinish = true
             }
         }
+
+
     }
+
 
 
 }

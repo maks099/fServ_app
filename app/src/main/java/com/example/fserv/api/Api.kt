@@ -1,6 +1,7 @@
 package com.example.fserv.api
 
 import com.example.fserv.model.server.EventResponse
+import com.example.fserv.model.server.NotificationResponse
 import com.example.fserv.model.server.TicketResponse
 import com.example.fserv.model.server.UserActivityResponse
 import okhttp3.ResponseBody
@@ -91,5 +92,10 @@ interface Api {
     fun getUserBilling(
         @Field("clientId") clientId: String
     ): Call<String>
+
+    @GET("searchNotifications/{clientId}")
+    fun searchNotifications(
+        @Path("clientId") clientId: String
+    ): Call<NotificationResponse>
 
 }

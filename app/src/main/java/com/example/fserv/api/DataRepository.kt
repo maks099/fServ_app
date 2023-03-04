@@ -5,6 +5,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import com.example.fserv.model.app.SearchOptions
 import com.example.fserv.model.server.Client
+import com.example.fserv.model.server.NotificationResponse
 import com.google.gson.GsonBuilder
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -53,6 +54,10 @@ class DataRepository {
 
     fun confirmAccount(token: String): Call<String> {
         return api.confirmAccount(token)
+    }
+
+    fun searchNotifications(clientId: String): Call<NotificationResponse> {
+        return api.searchNotifications(clientId)
     }
 
 

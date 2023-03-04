@@ -25,7 +25,6 @@ import kotlinx.coroutines.delay
 @Composable
 fun SplashPage(navController: NavController) {
     val viewModel: SplashViewModel = viewModel()
-    viewModel.checkUser()
     Box(
         Modifier
             .fillMaxWidth()

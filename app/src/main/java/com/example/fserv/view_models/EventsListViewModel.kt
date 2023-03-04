@@ -17,6 +17,7 @@ import com.example.fserv.api.DataRepository
 import com.example.fserv.model.app.*
 import com.example.fserv.model.server.Client
 import com.example.fserv.model.server.Event
+import com.example.fserv.model.server.NotificationResponse
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.flow.Flow
@@ -40,6 +41,7 @@ class EventsListViewModel : ViewModel() {
     var searchTerm by mutableStateOf("")
     var categories by mutableStateOf(Category.values())
     var pickedCategory by mutableStateOf(Category.All)
+
 
 
 

@@ -26,13 +26,17 @@ class ActivitiesListViewModel : ViewModel() {
 
 
     fun getCustomInfos(): Flow<PagingData<UserActivityObj>> {
-        Log.d("ActivitiesListViewModel", "is")
+        getBilling()
         return  ticketRepository.getUserActivities().cachedIn(viewModelScope)
     }
 
 
 
     init {
+        getBilling()
+    }
+
+    private fun getBilling(){
         dataRepo.getUserBilling().enqueue(
             object : Callback<String> {
                 override fun onResponse(call: Call<String> , response: Response<String>) {

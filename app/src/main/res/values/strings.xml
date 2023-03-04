@@ -66,6 +66,8 @@
     <string name="password_is_updated">The password is updated</string>
     <string name="password_is_not_valid">Password is not valid!</string>
     <string name="check_in_progress">Check in progress</string>
+    <string name="warning">Warning!</string>
+    <string name="event_is_removed">The organizer deleted the event for which you bought a ticket from</string>
 
 
 </resources>

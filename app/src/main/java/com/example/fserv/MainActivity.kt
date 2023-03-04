@@ -1,25 +1,33 @@
 package com.example.fserv
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import androidx.work.*
 import com.example.fserv.model.server.*
 import com.example.fserv.ui.LoginPage
 import com.example.fserv.ui.RegistrationPage
 import com.example.fserv.ui.pages.*
 import com.example.fserv.ui.theme.FservTheme
+import com.example.fserv.utils.NotificationWorker
 import com.example.fserv.view_models.AuthorizationViewModel
 import com.example.fserv.view_models.TicketsGroupsListViewModel
 import com.example.fserv.view_models.TicketsListViewModel
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.gson.Gson
+import java.util.concurrent.TimeUnit
 
 private const val TAG = "MainActivity123";
+
+private const val NOTIFICATION_WORKER = "NotificationWorker"
 
 class MainActivity : ComponentActivity() {
 
@@ -29,7 +37,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         startDestination = "splash_page"
-
+        startNotificationsChecking()
         checkForToken() // if user open app by link for confirm his account
         setContent {
             ProvideWindowInsets {
@@ -161,6 +169,22 @@ class MainActivity : ComponentActivity() {
 
     }
 
+    private fun startNotificationsChecking(){
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+        val periodicReques =
+            PeriodicWorkRequestBuilder<NotificationWorker>(1, TimeUnit.MINUTES)
+                .setConstraints(constraints)
+                .build()
+
+        WorkManager.getInstance().enqueueUniquePeriodicWork(
+            NOTIFICATION_WORKER,
+            ExistingPeriodicWorkPolicy.KEEP,
+            periodicReques
+        )
+    }
+
 
 
     private fun checkForToken() {
@@ -178,6 +202,11 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    companion object {
+        fun newIntent(context: Context) : Intent {
+            return Intent(context, MainActivity::class.java)
+        }
+    }
 
 
 }

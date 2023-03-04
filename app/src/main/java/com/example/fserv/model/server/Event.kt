@@ -5,24 +5,45 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
 import androidx.navigation.NavType
+import com.example.fserv.utils.parseJSDate
 import com.google.gson.Gson
 import kotlinx.parcelize.Parcelize
+import java.util.*
 
 @Parcelize
 public data class Event(
     val _id: String,
     val name: String,
     val address: String,
-    val organizerName: String,
+    val trademark: String,
     val latitude: Double,
     val longitude: Double,
     val description: String,
     val isPaid: Boolean,
     val date: String,
+    val secondDate: String?,
     val tags: List<String>,
     val gallery: List<String>
 ):Parcelable{
     override fun toString(): String = Uri.encode(Gson().toJson(this))
+
+    fun getParsedDate(currentLocale: Locale): String{
+
+        return if(secondDate != null){
+            "${parseJSDate(
+                date,
+                currentLocale
+            )} - ${parseJSDate(
+                secondDate,
+                currentLocale
+            )}"
+        } else {
+            parseJSDate(
+                date,
+                currentLocale
+            )
+        }
+    }
 }
 @Parcelize
 class UserActivityObj(
@@ -55,6 +76,7 @@ abstract class JsonNavType<T> : NavType<T>(isNullableAllowed = false) {
         bundle.putString(key, value.getJsonParse())
     }
 }
+
 
 
 

@@ -53,7 +53,8 @@ fun EventPagePreview(){
         latitude = 48.621025,
         longitude =  22.288229,
         isPaid = false,
-        organizerName = "organizer",
+        secondDate = null,
+        trademark = "organizer",
         date = "2023-02-23T22:46:00.000+00:00",
         tags = listOf("concert", "rock", "heavy metal", "powerwolf", "gocha bee"),
         description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
@@ -103,15 +104,10 @@ fun EventPage(navController: NavController, event: Event){
                 val configuration = LocalConfiguration.current
                 val currentLocale = ConfigurationCompat.getLocales(configuration).get(0)
                 RowItem(
-                    text = "${stringResource(id = R.string.organizer)}\r\n${event.organizerName}"
+                    text = "${stringResource(id = R.string.organizer)}\r\n${event.trademark}"
                 )
                 RowItem(
-                    text = "${stringResource(id = R.string.date)}\r\n${
-                        parseJSDate(
-                            event.date,
-                            currentLocale
-                        )
-                    }"
+                    text = "${stringResource(id = R.string.date)}\r\n${currentLocale?.let { event.getParsedDate(it) }}"
                 )
             }
 
@@ -222,22 +218,3 @@ private fun RowScope.RowItem(text: String){
 }
 
 
-private fun parseJSDate(dateString: String, locale: Locale?): String{
-    Log.d("DATE", dateString)
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        val odt = OffsetDateTime.parse(dateString)
-
-        val dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm", locale);
-        dtf.format(odt);
-    } else {
-        val dateTimeParts = dateString.split("T")
-        val datePart = dateTimeParts[0].split("-")
-        val dateRes = "${datePart[2]}/${datePart[1]}/${datePart[0]}"
-
-        val timePart = dateTimeParts[1].split(":")
-        val timeRes = "${timePart[0]}:${timePart[1]}"
-
-        return "$dateRes $timeRes"
-    }
-
-}
