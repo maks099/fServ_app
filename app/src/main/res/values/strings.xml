@@ -68,6 +68,10 @@
     <string name="check_in_progress">Check in progress</string>
     <string name="warning">Warning!</string>
     <string name="event_is_removed">The organizer deleted the event for which you bought a ticket from</string>
+    <string name="recharge">Recharge</string>
+    <string name="choose_amount">Choose an amount:</string>
+    <string name="google_pay">Google Pay</string>
+    <string name="debit_card">Debit card</string>
 
 
 </resources>

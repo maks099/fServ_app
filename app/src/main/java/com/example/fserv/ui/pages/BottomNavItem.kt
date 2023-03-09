@@ -84,7 +84,6 @@ fun NavigationGraph(navController: NavController,
         }
         composable(BottomNavItem.Account.screen_route) {
             AccountPage(
-                navController,
                 activityListState = activityListState,
                 activities,
                 onUserActivityClick = {

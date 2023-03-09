@@ -32,7 +32,7 @@ class DataRepository {
             .create()
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://10.0.2.2:3000/")// https://fserv-api.onrender.com/
+            .baseUrl("http://192.168.43.247:3000/")// https://fserv-api.onrender.com/
             .addConverterFactory(ScalarsConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()

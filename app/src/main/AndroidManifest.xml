@@ -5,9 +5,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
-        tools:ignore="ScopedStorage"/>
-
+    <uses-permission
+        android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
 
     <application
         android:name=".FServApplication"
@@ -15,41 +15,48 @@
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
-        android:requestLegacyExternalStorage="true"
         android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:requestLegacyExternalStorage="true"
         android:supportsRtl="true"
         android:theme="@style/Theme.Fserv"
-        tools:targetApi="31"
-        android:networkSecurityConfig="@xml/network_security_config">
-
+        tools:targetApi="31">
+        <activity
+            android:name=".ui.pages.PayActivity"
+            android:theme="@style/Theme.AppCompat.Light"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustResize"
-            android:theme="@style/Theme.Fserv">
+            android:theme="@style/Theme.Fserv"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data
                     android:host="localhost"
-                    android:scheme="http"
-                    android:pathPattern="/confirmAccount/.*"/>
+                    android:pathPattern="/confirmAccount/.*"
+                    android:scheme="http" />
                 <data
                     android:host="localhost"
-                    android:scheme="http"
-                    android:pathPattern="/resetPassword/.*"/>
+                    android:pathPattern="/resetPassword/.*"
+                    android:scheme="http" />
             </intent-filter>
         </activity>
-
+        <meta-data
+            android:name="com.google.android.gms.wallet.api.enabled"
+            android:value="true" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAb0FDX-kXAMDvawZWxn43QqTT8xW0QLc0"/>
+            android:value="AIzaSyAb0FDX-kXAMDvawZWxn43QqTT8xW0QLc0" />
 
         <meta-data
             android:name="ENCRYPTION_KEY"
@@ -60,12 +67,14 @@
             android:authorities="com.example.fserv.provider"
             android:exported="false"
             android:grantUriPermissions="true">
+
             <!-- ressource file to create -->
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths">
-            </meta-data>
+                android:resource="@xml/file_paths"></meta-data>
         </provider>
+
+
     </application>
 
 </manifest>
