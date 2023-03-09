@@ -4,7 +4,6 @@ import android.app.Activity
 import android.app.PendingIntent
 import android.util.Log
 import androidx.activity.ComponentActivity
-import androidx.activity.result.IntentSenderRequest
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -25,9 +24,11 @@ import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.wallet.PaymentDataRequest
 import com.stripe.android.PaymentConfiguration
 import com.stripe.android.paymentsheet.PaymentSheet
+import com.stripe.android.paymentsheet.PaymentSheetContract
 import com.stripe.android.paymentsheet.PaymentSheetResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -67,14 +68,14 @@ class ActivitiesListViewModel : ViewModel() {
 
 
 
-    fun handlePaymentResult(result: PaymentSheetResult) {
+    fun handleStripeResult(result: PaymentSheetResult, onError: (String) -> Unit) {
         when(result) {
             PaymentSheetResult.Canceled -> {
                 Log.d("TAG", "canceled")
             }
-            PaymentSheetResult.Completed ->                Log.d("TAG", "success")
+            PaymentSheetResult.Completed -> updateAccount()
 
-            is PaymentSheetResult.Failed ->                 Log.d("TAG", "fails")
+            is PaymentSheetResult.Failed -> onError("Try again")
 
         }
     }
@@ -114,17 +115,31 @@ class ActivitiesListViewModel : ViewModel() {
     }
 
     fun updateAccount() {
-        // TODO: make query to server
-        account += Integer.parseInt(topUpSum)
+        dataRepo.updateUserBilling(topUpSum).enqueue(
+            object : Callback<String> {
+                override fun onResponse(call: Call<String> , response: Response<String>) {
+                    when(response.isSuccessful){
+                        true -> {
+                            account+=Integer.parseInt(topUpSum)
+                            topUpSum = ""
+                        }
+                        false -> {}
+                    }
+                }
+
+                override fun onFailure(call: Call<String> , t: Throwable) {
+                    Log.d("ERROR", t.message.toString())
+                }
+            }
+        )
     }
 
     fun startGooglePayAction(activity: Activity, onSuccess: (PendingIntent) -> Unit, onError: (String) -> Unit){
-        val paymentDataRequestJson = getPaymentDataRequest("1000")
+        val paymentDataRequestJson = getPaymentDataRequest(topUpSum)
         if (paymentDataRequestJson == null) {
             onError("Can't fetch payment data request")
         }
         val request = PaymentDataRequest.fromJson(paymentDataRequestJson.toString())
-
         val task =  createPaymentsClient(activity).loadPaymentData(request)
         task.addOnCompleteListener { completedTask ->
             if (!completedTask.isSuccessful) {
@@ -142,6 +157,40 @@ class ActivitiesListViewModel : ViewModel() {
             }
         }
     }
+
+    fun getStripePaymentSheet(
+        activity: Activity,
+        onSuccess: (PaymentSheetContract.Args) -> Unit,
+        onError: (String) -> Unit
+    ){
+        ticketRepository.getPaymentSheet(topUpSum).enqueue(
+            object : Callback<String> {
+                override fun onResponse(call: Call<String> , response: Response<String>) {
+                    when(response.isSuccessful){
+                        true -> response.body()?.let {
+                            try {
+                                val jObject=JSONObject(it)
+                                val paymentIntentClientSecret: String = jObject.getString("paymentIntent")
+                                val publishableKey: String = jObject.getString("publishableKey")
+                                PaymentConfiguration.init(activity, publishableKey)
+                                val args = PaymentSheetContract.Args.createPaymentIntentArgs(paymentIntentClientSecret)
+                                onSuccess(args)
+                            } catch (ex: java.lang.NumberFormatException){
+                                ex.printStackTrace()
+                            }
+                        }
+                        false -> onError("Bad Response")
+                    }
+                }
+
+                override fun onFailure(call: Call<String> , t: Throwable) {
+                    onError(t.message.toString())
+                }
+            }
+        )
+    }
+
+
 
 
     companion object {

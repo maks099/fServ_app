@@ -72,6 +72,10 @@ class DataRepository {
         }
     ).flow
 
+    fun updateUserBilling(toPay: String): Call<String> {
+        return api.updateUserBilling(toPay, userId)
+    }
+
 
     companion object {
         private var INSTANCE: DataRepository? = null

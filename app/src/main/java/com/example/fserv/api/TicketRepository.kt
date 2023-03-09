@@ -22,6 +22,10 @@ class TicketRepository {
         )
     }
 
+    fun getPaymentSheet(toPay: String): Call<String>{
+        return api.getPaymentSheet(toPay)
+    }
+
     fun getTickets(eventId: String) = Pager(
         config = PagingConfig(
             pageSize = NETWORK_PAGE_SIZE,

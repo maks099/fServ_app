@@ -98,4 +98,17 @@ interface Api {
         @Path("clientId") clientId: String
     ): Call<NotificationResponse>
 
+    @FormUrlEncoded
+    @POST("payment-sheet/")
+    fun getPaymentSheet(
+        @Field("toPay") toPay: String
+    ): Call<String>
+
+    @FormUrlEncoded
+    @POST("updateClientBilling")
+    fun updateUserBilling(
+        @Field("toPay") toPay: String,
+        @Field("clientId") clientId: String
+    ): Call<String>
+
 }

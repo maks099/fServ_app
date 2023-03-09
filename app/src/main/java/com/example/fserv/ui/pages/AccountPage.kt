@@ -56,11 +56,13 @@ import com.github.kittinunf.result.Result
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.google.android.gms.wallet.*
+import com.stripe.android.PaymentConfiguration
 import com.stripe.android.model.ConfirmPaymentIntentParams
 import com.stripe.android.model.PaymentMethodCreateParams
 import com.stripe.android.payments.paymentlauncher.PaymentResult
 import com.stripe.android.paymentsheet.PaymentSheet
 import com.stripe.android.paymentsheet.PaymentSheetContract
+import com.stripe.android.paymentsheet.PaymentSheetResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -138,34 +140,30 @@ fun AccountPage(
                     onSuccess ={ viewModel.updateAccount() }
                 )
 
-                val stripeLauncher = rememberLauncherForActivityResult(
-                    contract = PaymentSheetContract(),
-                    onResult = {
-                        viewModel.handlePaymentResult(it)
+                StripeWay(
+                    onPaymentResult = { viewModel.handleStripeResult(it
+                    ) {
+                        showSnackBar(
+                            R.string.error,
+                            ""
+                        )
+                    }
+                    },
+                    onClick = {
+                        func->
+                        coroutineScope.launch { modalSheetState.hide() }
+                        viewModel.getStripePaymentSheet(
+                            activity = activity,
+                            onSuccess = {
+                                args->
+                                func(args)
+                            },
+                            onError = {
+                                showSnackBar(R.string.error, it)
+                            }
+                        )
                     }
                 )
-
-
-                PaymentMethodRow(
-                    drawable=com.stripe.android.R.drawable.stripe_3ds2_ic_mastercard,
-                    contentDescription=R.string.debit_card
-                ) {
-                    coroutineScope.launch { modalSheetState.hide() }
-                    "http://10.0.2.2:3000/payment-sheet".httpPost().responseJson { _, _, result ->
-                        if (result is Result.Success) {
-                            val responseJson = result.get().obj()
-                            val paymentIntentClientSecret = responseJson.getString("paymentIntent")
-                            val customerConfig = PaymentSheet.CustomerConfiguration(
-                                responseJson.getString("customer"),
-                                responseJson.getString("ephemeralKey")
-                            )
-                            val publishableKey = responseJson.getString("publishableKey")
-                            //PaymentConfiguration.init(activity.context, publishableKey)
-                            val args = PaymentSheetContract.Args.createPaymentIntentArgs(paymentIntentClientSecret)
-                            stripeLauncher.launch(args)
-                        }
-                    }
-                }
 
             }
         }
@@ -238,6 +236,26 @@ fun AccountPage(
 }
 
 @Composable
+fun StripeWay(
+    onPaymentResult: (PaymentSheetResult) -> Unit,
+    onClick: ((PaymentSheetContract.Args) -> Unit) -> Unit
+) {
+    val stripeLauncher = rememberLauncherForActivityResult(
+        contract = PaymentSheetContract(),
+        onResult = {
+           onPaymentResult(it)
+        }
+    )
+
+    PaymentMethodRow(
+        drawable=com.stripe.android.R.drawable.stripe_3ds2_ic_mastercard,
+        contentDescription=R.string.debit_card
+    ) {
+        onClick { stripeLauncher.launch(it) }
+    }
+}
+
+@Composable
 fun GooglePayWay(
     activity: Activity,
     onGooglePayIsReady: () -> Unit,
@@ -277,40 +295,7 @@ fun GooglePayWay(
 }
 
 
-private fun onPaymentResult(paymentResult: PaymentResult) {
-    when (paymentResult) {
-        is PaymentResult.Completed -> {
 
-        }
-        is PaymentResult.Canceled -> {
-
-        }
-        is PaymentResult.Failed -> {
-
-        }
-    }
-}
-
-
-private fun createAndConfirmPaymentIntent(
-    params: PaymentMethodCreateParams,
-    onConfirm: (ConfirmPaymentIntentParams) -> Unit
-) {
-    "http://10.0.2.2:3000/payment-sheet".httpPost().responseJson { _, _, result ->
-        if (result is Result.Success) {
-            val responseJson = result.get().obj()
-            val paymentIntentClientSecret = responseJson.getString("paymentIntent")
-
-            val confirmPaymentIntentParams =
-                ConfirmPaymentIntentParams.createWithPaymentMethodCreateParams(
-                    paymentMethodCreateParams = params,
-                    clientSecret = paymentIntentClientSecret
-                )
-            onConfirm(confirmPaymentIntentParams)
-        }
-    }
-
-}
 
 
 @Composable
