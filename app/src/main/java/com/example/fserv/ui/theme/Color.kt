@@ -2,7 +2,6 @@ package com.example.fserv.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Purple200 = Color(0xFFBB86FC)
-val Purple500 = Color(0xFF6200EE)
-val Purple700 = Color(0xFF3700B3)
-val Teal200 = Color(0xFF03DAC5)
+val ActionOrange = Color(0xffff6a00)
+val ActionDark = Color(0xFF040406)
+val TextLight = Color(0xfff8f9fa)

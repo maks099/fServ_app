@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="bottom_padding">24dp</dimen>
+    <dimen name="logo_padding">56dp</dimen>
+    <dimen name="spacer_height">8dp</dimen>
+    <dimen name="corner">8dp</dimen>
+    <dimen name="logo_padding_medium">28dp</dimen>
+</resources>

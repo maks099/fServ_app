@@ -45,7 +45,10 @@ class EventsListViewModel : ViewModel() {
 
 
 
-    fun updateSearch(newSearchTerm: String) = { -> searchTerm = newSearchTerm }
+    fun updateSearch(newSearchTerm: String) {
+        Log.d(TAG, newSearchTerm);
+        searchTerm = newSearchTerm
+    }
 
     fun getEvents(): Flow<PagingData<Event>> {
         Log.d("ClientID", dataRepository.userId)

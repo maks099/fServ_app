@@ -21,10 +21,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Fserv"
         tools:targetApi="31">
-        <activity
-            android:name=".ui.pages.PayActivity"
-            android:theme="@style/Theme.AppCompat.Light"
-            android:exported="false" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

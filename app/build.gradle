@@ -76,12 +76,14 @@ dependencies {
     implementation "androidx.paging:paging-runtime:$paging_version"
     implementation "androidx.paging:paging-compose:1.0.0-alpha17"
 
-    implementation "com.google.accompanist:accompanist-insets:0.22.0-rc"
     implementation 'androidx.test:core-ktx:1.4.0'
     implementation group: 'org.mindrot', name: 'jbcrypt', version: 0.4
     implementation 'com.squareup.retrofit2:converter-gson:2.6.1'
     implementation 'androidx.paging:paging-common-ktx:3.1.1'
 
+
+    implementation "com.google.accompanist:accompanist-insets:0.22.0-rc"
+    implementation "com.google.accompanist:accompanist-systemuicontroller:0.27.0"
     implementation "com.google.accompanist:accompanist-swiperefresh:0.25.1"
     implementation "com.google.accompanist:accompanist-pager:0.22.0-rc"
     implementation "com.google.accompanist:accompanist-flowlayout:0.25.1"

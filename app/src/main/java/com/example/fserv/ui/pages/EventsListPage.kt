@@ -84,8 +84,7 @@ fun EventsPage(navController: NavController,  state: LazyListState, events: Lazy
                 )
         ) {
             Column {
-                SearchPanel(viewModel,viewModel.searchTerm,
-                    { viewModel.updateSearch(it) }, )
+                SearchPanel(viewModel.searchTerm )
 
 
                 LazyRow {
@@ -222,15 +221,13 @@ onEventCardClick: (Event) -> Unit){
 
 @Composable
 fun SearchPanel(
-    viewModel: EventsListViewModel,
-    value: String,
-    onChange: (String) -> Unit
+    value: String
 ){
     Row{
         OutlinedTextField(
             value = value,
             maxLines = 1,
-            onValueChange = { onChange(it) },
+            onValueChange = { viewModel.updateSearch(it) },
             modifier = Modifier
                 .padding(5.dp)
                 .weight(1.0f)

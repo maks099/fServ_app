@@ -11,6 +11,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.material.Button
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -29,6 +30,7 @@ import com.example.fserv.view_models.AuthorizationViewModel
 import com.example.fserv.view_models.TicketsGroupsListViewModel
 import com.example.fserv.view_models.TicketsListViewModel
 import com.google.accompanist.insets.ProvideWindowInsets
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.android.gms.wallet.AutoResolveHelper
 import com.google.android.gms.wallet.PaymentData
 import com.google.gson.Gson
@@ -47,7 +49,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        startDestination = "splash_page"
+        startDestination = "login_page"
         startNotificationsChecking()
         checkForToken() // if user open app by link for confirm his account
         setContent {
@@ -55,7 +57,13 @@ class MainActivity : ComponentActivity() {
             ProvideWindowInsets {
 
                 FservTheme {
-
+                    val systemUiController = rememberSystemUiController()
+                    systemUiController.setStatusBarColor(
+                        color = colorResource(id=R.color.action_orange)
+                    )
+                    systemUiController.setNavigationBarColor(
+                        color = colorResource(id=R.color.action_dark)
+                    )
                     val navController=rememberNavController()
                     NavHost(
                         navController=navController,
@@ -63,11 +71,7 @@ class MainActivity : ComponentActivity() {
                         builder={
                             composable(
                                 "splash_page",
-                                content={
-                                    SplashPage(
-                                        navController=navController
-                                    )
-                                }
+                                content={ SplashPage(navController) }
                             )
 
                             composable(

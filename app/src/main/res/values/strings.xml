@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">fserv</string>
+    <string name="app_name">Fest Serv</string>
 
     <string name="error_form">Check your fields!</string>
     <string name="server_error">Server error:</string>
@@ -72,6 +72,9 @@
     <string name="choose_amount">Choose an amount:</string>
     <string name="google_pay">Google Pay</string>
     <string name="debit_card">Debit card</string>
+    <string name="logo">Logo</string>
+    <string name="version">Version</string>
+    <string name="create_an_account">Create An Account</string>
 
 
 </resources>

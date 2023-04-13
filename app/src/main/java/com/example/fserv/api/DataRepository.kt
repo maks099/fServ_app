@@ -15,6 +15,7 @@ import retrofit2.create
 
 
 const val NETWORK_PAGE_SIZE = 25
+
 class DataRepository {
 
     var userId: String = ""

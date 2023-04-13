@@ -1,21 +1,26 @@
 package com.example.fserv.ui
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.BlurredEdgeTreatment
+import androidx.compose.ui.draw.blur
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.paint
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.fserv.R
@@ -25,11 +30,6 @@ import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.navigationBarsWithImePadding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-
-
 
 @Composable
 fun LoginPage(navController: NavController, viewModel: AuthorizationViewModel, login: String? = "") {
@@ -43,28 +43,23 @@ fun LoginPage(navController: NavController, viewModel: AuthorizationViewModel, l
 
     Scaffold(
         scaffoldState = scaffoldState,
+
         content = { padding ->
-            Box(
+            Column(
                 modifier =Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight()
-                    .background(
-                        color=Color.Transparent,
+                    .paint(
+                        painter=painterResource(R.drawable.login_bg),
+                        contentScale=ContentScale.FillHeight
                     )
+                    .fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+
+
             ) {
 
-                Box(
-                    modifier = Modifier.align(Alignment.BottomCenter),
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_launcher_background) ,
-                        contentDescription = null ,
-                        contentScale = ContentScale.Fit ,
-                        modifier =Modifier
-                            .height(150.dp)
-                            .fillMaxWidth() ,
 
-                        )
+
                     ProvideWindowInsets(windowInsetsAnimationsEnabled = true) {
                         Column(
                             modifier =Modifier
@@ -72,19 +67,31 @@ fun LoginPage(navController: NavController, viewModel: AuthorizationViewModel, l
                                 .fillMaxWidth()
                                 .statusBarsPadding()
                                 .navigationBarsWithImePadding()
-                                .verticalScroll(rememberScrollState()) ,
-
+                                .verticalScroll(rememberScrollState())
+                                .clip(RoundedCornerShape(dimensionResource(id=R.dimen.corner)))
+                                .background(colorResource(id=R.color.action_dark).copy(alpha=0.7f))
+                                .blur(
+                                    radiusX=250.dp,
+                                    radiusY=500.dp,
+                                    edgeTreatment=BlurredEdgeTreatment(RoundedCornerShape(dimensionResource(id=R.dimen.corner)))
+                                ),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.fireworks_light) ,
+                                contentDescription = null ,
+                                contentScale = ContentScale.Fit ,
+                                modifier =Modifier
+                                    .padding(dimensionResource(id=R.dimen.logo_padding_medium))
+                                    .height(150.dp)
 
-                            Spacer(modifier = Modifier.height(50.dp))
+                                )
+                            Spacer(modifier = Modifier.height(dimensionResource(id=R.dimen.spacer_height)))
 
                             Text(
-                                text = "Sign In" ,
+                                text = stringResource(id=R.string.sign_in) ,
                                 textAlign = TextAlign.Center ,
-                                modifier =Modifier
-                                    .padding(top=130.dp)
-                                    .fillMaxWidth() ,
+                                fontWeight = FontWeight.Bold,
                                 style = MaterialTheme.typography.h5 ,
                                 color = MaterialTheme.colors.primary ,
                             )
@@ -164,15 +171,16 @@ fun LoginPage(navController: NavController, viewModel: AuthorizationViewModel, l
 
                             }) {
                                 Text(
-                                    text = "Create An Account" ,
+                                    text = stringResource(id=R.string.create_an_account) ,
                                     letterSpacing = 1.sp ,
-                                    style = MaterialTheme.typography.caption
+                                    style = MaterialTheme.typography.body1
                                 )
                             }
 
 
                             Spacer(modifier = Modifier.padding(5.dp))
-                            TextButton(onClick = {
+                            TextButton(
+                                onClick = {
 
                                 navController.navigate("forgot_password_page") {
                                     popUpTo(navController.graph.startDestinationId){
@@ -185,12 +193,12 @@ fun LoginPage(navController: NavController, viewModel: AuthorizationViewModel, l
                                 Text(
                                     text = stringResource(id = R.string.forgot_password) ,
                                     letterSpacing = 1.sp ,
-                                    style = MaterialTheme.typography.caption ,
+                                    style = MaterialTheme.typography.body1,
                                 )
                             }
                             Spacer(modifier = Modifier.padding(20.dp))
                         }
-                    }
+
 
                 }
             }

@@ -3,6 +3,7 @@ package com.example.fserv.view_models
 import android.os.Environment
 import android.os.StrictMode
 import android.os.StrictMode.ThreadPolicy
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -23,7 +24,7 @@ import java.io.FileOutputStream
 import java.io.IOException
 
 
-class TicketsListViewModel(val eventId: String): ViewModel() {
+class TicketsListViewModel(private val eventId: String): ViewModel() {
 
     var isRefreshing = MutableStateFlow(false)
     private val repo = TicketRepository.get()
@@ -41,6 +42,7 @@ class TicketsListViewModel(val eventId: String): ViewModel() {
         if(myFile.exists()) {
             next()
         } else {
+            Log.d("TAG", "start download file")
             viewModelScope.launch {
                 repo.downloadTicket(ticketId).enqueue(
                     object : Callback<ResponseBody>{
@@ -51,10 +53,13 @@ class TicketsListViewModel(val eventId: String): ViewModel() {
                             if(response.isSuccessful){
                                 getPdfFromResponse(response, next)
                             }
+                            else{
+                                Log.d("TAG", response.errorBody().toString())
+                            }
                         }
 
                         override fun onFailure(call: Call<ResponseBody> , t: Throwable) {
-                            TODO("Not yet implemented")
+                            Log.d("TAG", t.message.toString())
                         }
 
                     }

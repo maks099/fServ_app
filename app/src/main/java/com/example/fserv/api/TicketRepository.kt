@@ -7,7 +7,7 @@ import retrofit2.Call
 
 class TicketRepository {
 
-    val mainRepository = DataRepository.get()
+    private val mainRepository = DataRepository.get()
     private var api: Api = mainRepository.api
 
     fun getTicketsGroupsByEvent(eventID: String): Call<String> {
