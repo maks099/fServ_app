@@ -1,15 +1,24 @@
 package com.example.fserv.ui.pages
 
+import android.content.Context
 import android.util.Log
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role.Companion.Image
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -21,30 +30,41 @@ import com.example.fserv.view_models.ActivitiesListViewModel
 import com.example.fserv.view_models.EventsListViewModel
 import com.example.fserv.view_models.TicketsListViewModel
 
-sealed class BottomNavItem(var title:String, var icon:Int, var screen_route:String){
-    object Events : BottomNavItem("Events", R.drawable.baseline_share_24,"events_page")
-    object Account: BottomNavItem("Account",R.drawable.baseline_file_open_24,"account_page")
+ class BottomNavItem(var title:String, var icon:ImageVector, var screen_route:String){}
+
+private fun prepareBottomMenu(ctx: Context): List<BottomNavItem>{
+    val items = listOf(
+        BottomNavItem(ctx.getString(R.string.events),  Icons.Default.Menu,"events_page"),
+        BottomNavItem(ctx.getString(R.string.account),  Icons.Default.AccountCircle,"account_page")
+    )
+    return items;
 }
 
 @Composable
 fun BottomNavigationPanel(navController: NavController) {
-    val items = listOf(
-        BottomNavItem.Events,
-        BottomNavItem.Account
-    )
+
     BottomNavigation(
-        backgroundColor = colorResource(id = R.color.teal_200),
-        contentColor = Color.Black
+        backgroundColor = colorResource(id = R.color.action_dark),
     ) {
-        items.forEach { item ->
+        prepareBottomMenu(LocalContext.current).forEach { item ->
             BottomNavigationItem(
-                icon = { Icon(painterResource(id = item.icon), contentDescription = item.title) },
-                label = { Text(text = item.title,
-                    fontSize = 9.sp) },
-                selectedContentColor = Color.Black,
-                unselectedContentColor = Color.Black.copy(0.4f),
+                icon = {
+                    Icon(
+                        imageVector = item.icon,
+                        contentDescription ="",
+                        tint = colorResource(id=R.color.action_orange)
+                    )
+               },
+                label = {
+                    Text(
+                        text = item.title,
+                        style = MaterialTheme.typography.body1,
+                        fontSize = 16.sp,
+                        color = colorResource(id=R.color.text_light)
+                    )
+                },
                 alwaysShowLabel = true,
-                selected = false,
+                selected = true,
                 onClick = {
                     navController.navigate(item.screen_route) {
                         navController.graph.startDestinationRoute?.let { screen_route ->
@@ -55,7 +75,8 @@ fun BottomNavigationPanel(navController: NavController) {
                         launchSingleTop = true
                         restoreState = true
                     }
-                }
+                },
+
             )
         }
     }
@@ -73,8 +94,10 @@ fun NavigationGraph(navController: NavController,
     val activities = ActivitiesListViewModel.get().getCustomInfos().collectAsLazyPagingItems()
     val events = EventsListViewModel.get().getEvents().collectAsLazyPagingItems()
 
-    NavHost(navController = bottomNavHost, startDestination = BottomNavItem.Events.screen_route) {
-        composable(BottomNavItem.Events.screen_route) {
+    val menu = prepareBottomMenu(LocalContext.current)
+
+    NavHost(navController = bottomNavHost, startDestination = menu.first().screen_route) {
+        composable(menu.first().screen_route) {
             EventsPage(navController, eventsListState, events,
                 onEventCardClick = {
                     navController.navigate("event_page/${it}") {
@@ -82,7 +105,7 @@ fun NavigationGraph(navController: NavController,
                     }
             })
         }
-        composable(BottomNavItem.Account.screen_route) {
+        composable(menu.last().screen_route) {
             AccountPage(
                 activityListState = activityListState,
                 activities,

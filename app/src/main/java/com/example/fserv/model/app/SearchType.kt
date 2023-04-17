@@ -22,7 +22,6 @@ data class SearchOptions(
     val searchTerm: String ,
     val userID: String
 ){
-    constructor(userID: String) : this(SearchType.Name, SortType.DateAscending, Category.Study, listOf(), "", userID)
     fun stringifyFilters(): String{
         var result = ""
         filters.forEach {

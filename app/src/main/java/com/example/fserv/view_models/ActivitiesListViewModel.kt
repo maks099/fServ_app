@@ -44,26 +44,9 @@ class ActivitiesListViewModel : ViewModel() {
     val isRefreshing = MutableStateFlow(false)
     private val ticketRepository = TicketRepository.get()
     private val dataRepo = DataRepository.get()
-    var account by mutableStateOf(-1.0)
+    var account by mutableStateOf(0.0)
 
 
-
-    fun getSecret(activity: ComponentActivity, onSuccess: () -> Unit = {}){
-        "http://10.0.2.2:3000/payment-sheet".httpPost().responseJson { _, _, result ->
-            if (result is Result.Success) {
-                val responseJson = result.get().obj()
-                paymentIntentClientSecret = responseJson.getString("paymentIntent")
-                customerConfig = PaymentSheet.CustomerConfiguration(
-                    responseJson.getString("customer"),
-                    responseJson.getString("ephemeralKey")
-                )
-                val publishableKey = responseJson.getString("publishableKey")
-                PaymentConfiguration.init(activity, publishableKey)
-                Log.d("TAG", "open stripe method succeeded")
-
-            }
-        }
-    }
 
 
 
@@ -88,7 +71,7 @@ class ActivitiesListViewModel : ViewModel() {
 
 
     init {
-        getBilling()
+        //getBilling()
     }
 
     private fun getBilling(){

@@ -13,11 +13,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.fserv.R
 
 
 @Composable
@@ -42,17 +44,22 @@ fun SimpleTags(
 
     Surface(
         shape = shape,
-        color = if(isActive) Color.Black else Color.White,
+        color = if(isActive) colorResource(id=R.color.action_dark) else colorResource(id=R.color.text_light),
         modifier = modifier,
         elevation = elevation,
-        border = BorderStroke(1.dp, Color.Black)
+        border = BorderStroke(1.dp, if(isActive) colorResource(id=R.color.text_light) else colorResource(id=R.color.action_dark))
     ) {
         Row(
-            modifier = Modifier
+            modifier =Modifier
                 .clickable(
-                    onClick = onClick
+                    onClick=onClick
                 )
-                .padding(start = 15.dp, end = 15.dp, top = 8.dp, bottom = 8.dp),
+                .padding(
+                    start=15.dp,
+                    end=15.dp,
+                    top=8.dp,
+                    bottom=8.dp
+                ),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             when{
@@ -83,8 +90,7 @@ fun SimpleTags(
                     Text(
                         text = text,
                         style = textStyle,
-                        color = if(isActive) Color.White else Color.Black,
-
+                        color = if(isActive) colorResource(id=R.color.text_light) else colorResource(id=R.color.action_dark),
                     )
                 }
             }

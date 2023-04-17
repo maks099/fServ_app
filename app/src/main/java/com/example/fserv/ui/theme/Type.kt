@@ -24,6 +24,11 @@ val Typography = Typography(
                 fontWeight = FontWeight.Normal,
                 fontSize = 16.sp
         ),
+        subtitle1 = TextStyle(
+                fontFamily = fonts,
+                fontWeight = FontWeight.Normal,
+                fontSize = 12.sp
+        ),
         h1 = TextStyle(
                 fontFamily = fonts,
                 fontWeight = FontWeight.Normal,
@@ -37,7 +42,12 @@ val Typography = Typography(
         h3 = TextStyle(
                 fontFamily = fonts,
                 fontWeight = FontWeight.Normal,
-                fontSize = 26.sp
+                fontSize = 22.sp
+        ),
+        h4 = TextStyle(
+                fontFamily = fonts,
+                fontWeight = FontWeight.Normal,
+                fontSize = 18.sp
         ),
         h5 = TextStyle(
                 fontFamily = fonts,

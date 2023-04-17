@@ -44,7 +44,6 @@ fun SplashPage(navController: NavHostController) {
 
     Scaffold(
         Modifier.fillMaxSize()
-
     ) {
         paddingValues ->
 

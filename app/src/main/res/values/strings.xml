@@ -15,7 +15,7 @@
 
     <string name="sign_in">Sign In</string>
     <string name="sign_up">Sign Up</string>
-    <string name="login">Login</string>
+    <string name="login">Log In</string>
     <string name="registration">Create account</string>
 
     <string name="enter_email">Email</string>
@@ -27,8 +27,8 @@
     <string name="sort_by">Sort by</string>
     <string name="name">name</string>
     <string name="address">location</string>
-    <string name="date_ascending">Date</string>
-    <string name="date_descending">Date</string>
+    <string name="date_ascending">date asc</string>
+    <string name="date_descending">date desc</string>
     <string name="event_image">Event image</string>
     <string name="empty_list">List is empty</string>
     <string name="dialog_ok">OK</string>
@@ -36,7 +36,7 @@
     <string name="music_tag">Music</string>
     <string name="study_tag">Study</string>
     <string name="football_tag">Football</string>
-    <string name="mys_tag">Mystectwo</string>
+    <string name="mys_tag">Art</string>
     <string name="all_tag">All</string>
     <string name="lessons_tag">Lessons</string>
     <string name="food_tag">Food</string>
@@ -62,7 +62,8 @@
     <string name="currency_short">grn.</string>
     <string name="reset_password">Reset password</string>
     <string name="email_for_reset_is_sended">Email for reset password is sended</string>
-    <string name="forgot_password">Forgotted password?</string>
+    <string name="pass_recovery">Password recovery</string>
+    <string name="forgot_password_question">Forgotted password?</string>
     <string name="password_is_updated">The password is updated</string>
     <string name="password_is_not_valid">Password is not valid!</string>
     <string name="check_in_progress">Check in progress</string>
@@ -78,6 +79,13 @@
     <string name="remove_ticket_confirm">If you delete this ticket, you will be refunded 75% of its cost. You really want to remove this ticket?</string>
     <string name="ticket_is_removed">Ticked is removed</string>
     <string name="delete_ticket">Remove ticket</string>
+    <string name="back">Back</string>
+    <string name="please_wait">Please wait...</string>
+    <string name="filter">Filter</string>
+    <string name="events">Events</string>
+    <string name="account">Account</string>
+    <string name="search_and_filter">Search and filters</string>
+    <string name="try_again">Try again</string>
 
 
 </resources>
