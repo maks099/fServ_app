@@ -52,6 +52,10 @@ class TicketRepository {
         return api.downloadTicket(ticketId)
     }
 
+    fun removeTicket(ticketId: String): Call<String> {
+        return api.removeTicket(ticketId, mainRepository.userId)
+    }
+
     companion object {
         private var INSTANCE: TicketRepository? = null
         fun initialize() {

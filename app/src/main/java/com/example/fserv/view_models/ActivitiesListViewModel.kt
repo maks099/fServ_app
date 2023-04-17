@@ -44,7 +44,7 @@ class ActivitiesListViewModel : ViewModel() {
     val isRefreshing = MutableStateFlow(false)
     private val ticketRepository = TicketRepository.get()
     private val dataRepo = DataRepository.get()
-    var account by mutableStateOf(-1)
+    var account by mutableStateOf(-1.0)
 
 
 
@@ -93,12 +93,12 @@ class ActivitiesListViewModel : ViewModel() {
 
     private fun getBilling(){
         dataRepo.getUserBilling().enqueue(
-            object : Callback<String> {
-                override fun onResponse(call: Call<String> , response: Response<String>) {
+            object : Callback<Double> {
+                override fun onResponse(call: Call<Double> , response: Response<Double>) {
                     when(response.isSuccessful){
                         true -> response.body()?.let {
                             try {
-                                account = Integer.parseInt(it)
+                                account = it
                             } catch (ex: java.lang.NumberFormatException){
                                 ex.printStackTrace()
                             }
@@ -107,7 +107,7 @@ class ActivitiesListViewModel : ViewModel() {
                     }
                 }
 
-                override fun onFailure(call: Call<String> , t: Throwable) {
+                override fun onFailure(call: Call<Double> , t: Throwable) {
                     Log.d("ERROR", t.message.toString())
                 }
             }

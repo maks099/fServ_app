@@ -49,7 +49,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        startDestination = "login_page"
+        startDestination = "splash_page"
         startNotificationsChecking()
         checkForToken() // if user open app by link for confirm his account
         setContent {

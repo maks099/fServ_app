@@ -7,9 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,41 +24,88 @@ import androidx.paging.compose.itemsIndexed
 import com.example.fserv.R
 import com.example.fserv.model.server.Ticket
 import com.example.fserv.ui.controls.*
+import com.example.fserv.ui.controls.dialogs.ConfirmationDialog
 import com.example.fserv.view_models.TicketsListViewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import kotlinx.coroutines.launch
 
 
 private lateinit var viewModel: TicketsListViewModel
 @Composable
 fun TicketsListPage(viewModel1: TicketsListViewModel) {
     viewModel = viewModel1
+    var pickedTicket = remember {
+        mutableStateOf(Ticket.getEmpty())
+    }
+    val scaffoldState: ScaffoldState = rememberScaffoldState()
+    val coroutineScope = rememberCoroutineScope()
+    val tickets = viewModel.getTickets().collectAsLazyPagingItems()
+    val isRefreshing by viewModel.isRefreshing.collectAsState()
+    val context = LocalContext.current;
     Scaffold(
-
+        scaffoldState = scaffoldState,
     ) { paddingValues ->
         Box(
-            modifier = Modifier
+            modifier =Modifier
                 .fillMaxWidth()
                 .fillMaxHeight()
                 .padding(paddingValues)
                 .background(
-                    color = Color.Transparent ,
+                    color=Color.Transparent,
                 )
         ) {
+            fun showSnackBar(
+                title: Int,
+                message: String,
+            ) {
+                if(!viewModel.snackIsShowing){
+                    viewModel.snackIsShowing = true
+                    coroutineScope.launch {
+                        val snackbarResult=
+                            scaffoldState.snackbarHostState.showSnackbar(
+                                message="${context.getString(title)} $message",
+                            )
+                        when (snackbarResult) {
+                            SnackbarResult.Dismissed, SnackbarResult.ActionPerformed -> {
+                                viewModel.snackIsShowing = false
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (pickedTicket.value._id != ""){
+                ConfirmationDialog(
+                    question = R.string.remove_ticket_confirm,
+                    onDismiss= { pickedTicket.value = Ticket.getEmpty() },
+                    onConfirm ={
+                        viewModel.removeTicket(
+                            pickedTicket.value._id,
+                            onError = {showSnackBar(R.string.error, it)},
+                            onSuccess = {
+                                tickets.refresh()
+                                showSnackBar(R.string.ticket_is_removed, "")
+                            }
+                        )
+                        pickedTicket.value = Ticket.getEmpty()
+                    }
+                )
+            }
+
             Column {
 
-                val tickets = viewModel.getTickets().collectAsLazyPagingItems()
-                val isRefreshing by viewModel.isRefreshing.collectAsState()
+
 
                 SwipeRefresh(
                     state = rememberSwipeRefreshState(isRefreshing) ,
                     onRefresh = { tickets.refresh() } ,
-                    modifier = Modifier
+                    modifier =Modifier
                         .fillMaxHeight()
                         .fillMaxWidth()
                 ) {
                     LazyColumn(
-                        modifier = Modifier
+                        modifier =Modifier
                             .fillMaxHeight()
                             .fillMaxWidth()
                     ) {
@@ -69,8 +114,10 @@ fun TicketsListPage(viewModel1: TicketsListViewModel) {
                             if (ticket != null) {
                                 TicketCard(
                                     index = index,
-                                    ticket = ticket
-                                )
+                                    ticket = ticket,
+                                ){
+                                    pickedTicket.value = ticket
+                                }
                             }
                         }
 
@@ -120,13 +167,17 @@ fun TicketsListPage(viewModel1: TicketsListViewModel) {
 
 
 @Composable
-private fun TicketCard(index: Int, ticket: Ticket){
+private fun TicketCard(
+    index: Int,
+    ticket: Ticket,
+    onDelete: () -> Unit,
+    ){
     Card(
         shape = RoundedCornerShape(10.dp) ,
-        modifier = Modifier
+        modifier =Modifier
             .padding(
-                horizontal = 16.dp ,
-                vertical = 8.dp
+                horizontal=16.dp,
+                vertical=8.dp
             )
             .fillMaxWidth()
         ) {
@@ -138,10 +189,17 @@ private fun TicketCard(index: Int, ticket: Ticket){
                     horizontal = 25.dp,
                 )
         ){
-            Text(
-                text = "#$index",
-                fontSize = 14.sp
-            )
+            Column{
+                Text(
+                    text = "#$index",
+                    fontSize = 14.sp
+                )
+                Text(
+                    text = "${ticket.groupName} / ${ticket.price} ${stringResource(id=R.string.currency_short)}",
+                    fontSize = 14.sp
+                )
+            }
+
             Row{
                 val context = LocalContext.current
                 IconButton(
@@ -160,6 +218,15 @@ private fun TicketCard(index: Int, ticket: Ticket){
                     Icon(
                         painter = painterResource(id = R.drawable.baseline_share_24) ,
                         contentDescription = stringResource(id = R.string.share_ticket_file)
+                    )
+                }
+                IconButton(
+                    onClick = {
+                        onDelete()
+                    }) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.baseline_delete_forever_24) ,
+                        contentDescription = stringResource(id = R.string.delete_ticket)
                     )
                 }
 

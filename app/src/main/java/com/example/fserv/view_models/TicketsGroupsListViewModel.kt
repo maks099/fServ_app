@@ -19,16 +19,16 @@ class TicketsGroupsListViewModel(val ticketsGroups: List<TicketGroup>, val event
     private val repo = TicketRepository.get()
     private val dataRepo = DataRepository.get()
     var transactionStatus by mutableStateOf(DownloadType.PREVIEW)
-    var account by mutableStateOf(-1)
+    var account by mutableStateOf(-1.0)
 
     init {
         dataRepo.getUserBilling().enqueue(
-            object : Callback<String>{
-                override fun onResponse(call: Call<String> , response: Response<String>) {
+            object : Callback<Double>{
+                override fun onResponse(call: Call<Double> , response: Response<Double>) {
                     when(response.isSuccessful){
                         true -> response.body()?.let {
                             try {
-                                account = Integer.parseInt(it)
+                                account = it
                             } catch (ex: java.lang.NumberFormatException){
                                 ex.printStackTrace()
                             }
@@ -37,7 +37,7 @@ class TicketsGroupsListViewModel(val ticketsGroups: List<TicketGroup>, val event
                     }
                 }
 
-                override fun onFailure(call: Call<String> , t: Throwable) {
+                override fun onFailure(call: Call<Double> , t: Throwable) {
                     Log.d("ERROR", t.message.toString())
                 }
             }

@@ -27,6 +27,7 @@ import com.example.fserv.api.DataRepository
 import com.example.fserv.model.app.DownloadType
 import com.example.fserv.model.server.TicketGroup
 import com.example.fserv.ui.controls.HorizontalNumberPicker
+import com.example.fserv.ui.controls.dialogs.ConfirmationDialog
 import com.example.fserv.view_models.TicketsGroupsListViewModel
 import kotlinx.coroutines.delay
 
@@ -127,6 +128,7 @@ fun TicketsGroups(navController: NavController, viewModel: TicketsGroupsListView
             }
             if (confirmAlertIsVisible) {
                 ConfirmationDialog(
+                    question = R.string.payment_confirmation,
                     onDismiss = { confirmAlertIsVisible = false } ,
                     onConfirm = {
                         confirmAlertIsVisible = false
@@ -193,47 +195,5 @@ private fun ErrorDialog(
        
         title = { Text(text = stringResource(id = R.string.error)) },
         text = { Text(text = stringResource(id = R.string.not_enough_funds)) }
-    )
-}
-
-@Composable
-private fun ConfirmationDialog(
-    onDismiss: () -> Unit,
-    onConfirm: () -> Unit
-) {
-    var seconds by remember {
-        mutableStateOf(5) // default value = 1 sec
-    }
-
-    var isEnabled by remember {
-        mutableStateOf(false) // default value = 1 sec
-    }
-    LaunchedEffect(key1 = Unit, block = {
-        while (seconds > 0){
-            delay(1000)
-            seconds--
-        }
-        isEnabled = true
-    })
-    AlertDialog(
-        onDismissRequest = { onDismiss() },
-        confirmButton = {
-            TextButton(
-                onClick = {
-                    onConfirm()
-                },
-                enabled = isEnabled
-            )
-            { if(!isEnabled) Text(text = "OK $seconds") else Text(text = "OK") }
-        },
-        dismissButton = {
-            TextButton(
-                onClick = { onDismiss() }) {
-                Text("Cancel")
-            }
-        },
-
-        title = { Text(text = stringResource(id = R.string.confirmation)) },
-        text = { Text(text = stringResource(id = R.string.payment_confirmation)) }
     )
 }

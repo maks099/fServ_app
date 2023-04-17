@@ -75,6 +75,9 @@
     <string name="logo">Logo</string>
     <string name="version">Version</string>
     <string name="create_an_account">Create An Account</string>
+    <string name="remove_ticket_confirm">If you delete this ticket, you will be refunded 75% of its cost. You really want to remove this ticket?</string>
+    <string name="ticket_is_removed">Ticked is removed</string>
+    <string name="delete_ticket">Remove ticket</string>
 
 
 </resources>

@@ -4,6 +4,9 @@ import android.os.Environment
 import android.os.StrictMode
 import android.os.StrictMode.ThreadPolicy
 import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -26,6 +29,7 @@ import java.io.IOException
 
 class TicketsListViewModel(private val eventId: String): ViewModel() {
 
+    var snackIsShowing by mutableStateOf(false)
     var isRefreshing = MutableStateFlow(false)
     private val repo = TicketRepository.get()
     lateinit var myFile: File
@@ -81,6 +85,30 @@ class TicketsListViewModel(private val eventId: String): ViewModel() {
             next()
         } catch (e: IOException) {
             e.printStackTrace()
+        }
+    }
+
+    fun removeTicket(
+        ticketId: String,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ){
+        viewModelScope.launch {
+            repo.removeTicket(ticketId).enqueue(
+                object : Callback<String>{
+                    override fun onResponse(
+                        call: Call<String>,
+                        response: Response<String>
+                    ) {
+                        onSuccess()
+                    }
+
+                    override fun onFailure(call: Call<String>, t: Throwable) {
+                        t.message?.let { onError(it) };
+                    }
+
+                }
+            )
         }
     }
 

@@ -48,7 +48,7 @@ class DataRepository {
         return api.loginClient(userData.email, userData.password)
     }
 
-    fun getUserBilling(): Call<String> {
+    fun getUserBilling(): Call<Double> {
         Log.d("Get billing id", userId)
         return api.getUserBilling(userId)
     }

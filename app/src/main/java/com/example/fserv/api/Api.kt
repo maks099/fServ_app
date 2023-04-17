@@ -59,6 +59,12 @@ interface Api {
         @Field("countOfTickets") countOfTickets: Int,
     ): Call<String>
 
+    @FormUrlEncoded
+    @POST("deleteTicket")
+    fun removeTicket(
+        @Field("ticketId") ticketId: String,
+        @Field("clientId") clientId: String
+    ): Call<String>
 
     @FormUrlEncoded
     @POST("searchTickets")
@@ -91,7 +97,7 @@ interface Api {
     @POST("getUserBilling")
     fun getUserBilling(
         @Field("clientId") clientId: String
-    ): Call<String>
+    ): Call<Double>
 
     @GET("searchNotifications/{clientId}")
     fun searchNotifications(
