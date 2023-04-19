@@ -28,10 +28,13 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+
+
 
 @Composable
 fun DialogBoxLoading(
@@ -49,22 +52,16 @@ fun DialogBoxLoading(
 
     ) {
         Surface(
-            elevation = 4.dp,
-            shape = RoundedCornerShape(cornerRadius),
             modifier =Modifier
                 .clip(RoundedCornerShape(dimensionResource(id=R.dimen.corner)))
-                .background(colorResource(id=R.color.action_dark).copy(alpha=0.15f))
+                .background(Color.Transparent)
         ) {
             Column(
                 modifier =Modifier
-                    .fillMaxWidth()
+                    .width(200.dp)
+                    .height(200.dp)
                     .clip(RoundedCornerShape(dimensionResource(id=R.dimen.corner)))
-                    .background(colorResource(id=R.color.action_dark).copy(alpha=0.15f))
-                    .blur(
-                        radiusX=250.dp,
-                        radiusY=500.dp,
-                        edgeTreatment=BlurredEdgeTreatment(RoundedCornerShape(dimensionResource(id=R.dimen.corner)))
-                    ),
+                    .background(colorResource(id=R.color.action_orange).copy(alpha=1f)),
 
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -89,6 +86,8 @@ fun DialogBoxLoading(
                 Text(
                     modifier = Modifier
                         .padding(bottom = paddingBottom),
+                    color = colorResource(id=R.color.text_light),
+                    style = MaterialTheme.typography.body1,
                     text = stringResource(id=R.string.please_wait)
                 )
             }
@@ -120,8 +119,7 @@ fun ProgressIndicatorLoading(progressIndicatorSize: Dp, progressIndicatorColor: 
                 12.dp,
                 brush=Brush.sweepGradient(
                     listOf(
-                        Color.White, // add background color first
-                        progressIndicatorColor.copy(alpha=0.1f),
+                        Color.White,
                         progressIndicatorColor
                     )
                 ),

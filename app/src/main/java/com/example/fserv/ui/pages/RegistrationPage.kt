@@ -37,60 +37,62 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-const val TAG = "RegisterPage"
+const val TAG="RegisterPage"
 
 @Composable
 fun RegistrationPage(
     navController: NavController,
     viewModel: AuthorizationViewModel
 ) {
-    val scaffoldState: ScaffoldState = rememberScaffoldState()
-    val coroutineScope: CoroutineScope = rememberCoroutineScope()
-    val context = LocalContext.current
+    val scaffoldState: ScaffoldState=rememberScaffoldState()
+    val coroutineScope: CoroutineScope=rememberCoroutineScope()
+    val context=LocalContext.current
 
     Scaffold(
-        scaffoldState = scaffoldState
+        scaffoldState=scaffoldState
     ) { padding ->
         Box(
-            modifier = Modifier
+            modifier=Modifier
                 .fillMaxSize()
                 .paint(
                     painter=painterResource(R.drawable.login_bg),
                     contentScale=ContentScale.FillHeight
                 ),
-            contentAlignment = Alignment.Center,
+            contentAlignment=Alignment.Center,
         ) {
-            ProvideWindowInsets(windowInsetsAnimationsEnabled = true) {
-                Column(
-                    modifier =Modifier
-                        .padding(16.dp)
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(dimensionResource(id=R.dimen.corner)))
-                        .background(colorResource(id=R.color.action_dark).copy(alpha=0.7f))
-                        .blur(
-                            radiusX=250.dp,
-                            radiusY=500.dp,
-                            edgeTreatment=BlurredEdgeTreatment(RoundedCornerShape(dimensionResource(id=R.dimen.corner)))
-                        ),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Image(
-                        painter=painterResource(id=R.drawable.fireworks_light),
-                        contentDescription=null,
-                        contentScale=ContentScale.Fit,
-                        modifier=Modifier
-                            .padding(dimensionResource(id=R.dimen.logo_padding_medium))
-                            .height(150.dp)
-                    )
-                    Spacer(modifier=Modifier.height(dimensionResource(R.dimen.spacer_height)))
+            Column(
+                modifier=Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth()
+                    .statusBarsPadding()
+                    .navigationBarsWithImePadding()
+                    .verticalScroll(rememberScrollState())
+                    .clip(RoundedCornerShape(dimensionResource(id=R.dimen.corner)))
+                    .background(colorResource(id=R.color.action_dark).copy(alpha=0.7f))
+                    .blur(
+                        radiusX=250.dp,
+                        radiusY=500.dp,
+                        edgeTreatment=BlurredEdgeTreatment(RoundedCornerShape(dimensionResource(id=R.dimen.corner)))
+                    ),
+                horizontalAlignment=Alignment.CenterHorizontally
+            ) {
+                Image(
+                    painter=painterResource(id=R.drawable.fireworks_light),
+                    contentDescription=null,
+                    contentScale=ContentScale.Fit,
+                    modifier=Modifier
+                        .padding(dimensionResource(id=R.dimen.logo_padding_medium))
+                        .height(150.dp)
+                )
 
-                    Text(
-                        text=stringResource(id=R.string.sign_up),
-                        textAlign=TextAlign.Center,
-                        style=MaterialTheme.typography.h5,
-                        color=MaterialTheme.colors.primary,
-                    )
-                    Spacer(modifier=Modifier.height(8.dp))
+                Text(
+                    text=stringResource(id=R.string.sign_up),
+                    textAlign=TextAlign.Center,
+                    style=MaterialTheme.typography.h2,
+                    color=MaterialTheme.colors.primary,
+                )
+                Spacer(modifier=Modifier.height(8.dp))
+                ProvideWindowInsets(windowInsetsAnimationsEnabled=true) {
 
                     LoginTextField(
                         value=viewModel.email,
@@ -110,7 +112,7 @@ fun RegistrationPage(
 
                     Spacer(modifier=Modifier.padding(10.dp))
                     SubmitButton(
-                        R.string.registration,
+                        text = stringResource(R.string.registration),
                         viewModel.actionButtonStatus
 
                     ) {

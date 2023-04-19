@@ -199,15 +199,16 @@ class MainActivity : ComponentActivity() {
                             }
 
                             composable(
-                                route="tickets_list_page/{eventID}",
+                                route="tickets_list_page/{eventID}/{eventName}",
                                 arguments=listOf(navArgument("eventID") {
                                     type=NavType.StringType
                                 })
                             ) { navBackStackEntry ->
                                 val eventId=navBackStackEntry.arguments?.getString("eventID")
-                                if (eventId != null) {
+                                val eventName=navBackStackEntry.arguments?.getString("eventName")
+                                if (eventId != null && eventName != null) {
                                     TicketsListPage(
-                                        TicketsListViewModel(eventId)
+                                        TicketsListViewModel(eventId, eventName)
                                     )
                                 }
                             }

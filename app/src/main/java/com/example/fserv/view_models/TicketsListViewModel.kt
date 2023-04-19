@@ -27,12 +27,14 @@ import java.io.FileOutputStream
 import java.io.IOException
 
 
-class TicketsListViewModel(private val eventId: String): ViewModel() {
+class TicketsListViewModel(private val eventId: String, val eventName: String): ViewModel() {
 
     var snackIsShowing by mutableStateOf(false)
     var isRefreshing = MutableStateFlow(false)
     private val repo = TicketRepository.get()
     lateinit var myFile: File
+
+
 
     fun getTickets(): Flow<PagingData<Ticket>> =
         repo.getTickets(

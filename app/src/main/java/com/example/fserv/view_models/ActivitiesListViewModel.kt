@@ -3,7 +3,6 @@ package com.example.fserv.view_models
 import android.app.Activity
 import android.app.PendingIntent
 import android.util.Log
-import androidx.activity.ComponentActivity
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -15,10 +14,7 @@ import com.example.fserv.api.DataRepository
 import com.example.fserv.api.TicketRepository
 import com.example.fserv.model.app.createPaymentsClient
 import com.example.fserv.model.app.getPaymentDataRequest
-import com.example.fserv.model.server.UserActivityObj
-import com.github.kittinunf.fuel.httpPost
-import com.github.kittinunf.fuel.json.responseJson
-import com.github.kittinunf.result.Result
+import com.example.fserv.model.server.UserActivity
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.wallet.PaymentDataRequest
@@ -63,7 +59,7 @@ class ActivitiesListViewModel : ViewModel() {
         }
     }
 
-    fun getCustomInfos(): Flow<PagingData<UserActivityObj>> {
+    fun getCustomInfos(): Flow<PagingData<UserActivity>> {
         getBilling()
         return  ticketRepository.getUserActivities().cachedIn(viewModelScope)
     }

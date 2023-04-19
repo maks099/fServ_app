@@ -1,10 +1,8 @@
 package com.example.fserv.ui.controls.dialogs
 
-import androidx.compose.material.AlertDialog
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
+import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import com.example.fserv.R
@@ -33,9 +31,20 @@ fun ConfirmationDialog(
     })
     AlertDialog(
         onDismissRequest = { onDismiss() },
+        title = {
+            Text(
+                text = stringResource(id = R.string.confirmation),
+                style = MaterialTheme.typography.h3,
+                color = colorResource(id=R.color.text_light)
+            )
+        },
+        backgroundColor = colorResource(id=R.color.action_orange).copy(alpha=0.925f),
         confirmButton = {
             TextButton(
-                colors = ButtonDefaults.outlinedButtonColors(colorResource(id=R.color.action_orange)),
+                colors = ButtonDefaults.outlinedButtonColors(
+                    backgroundColor = colorResource(id=R.color.action_dark),
+                    disabledContentColor = Color.LightGray
+                ),
                 onClick = {
                     onConfirm()
                 },
@@ -45,13 +54,22 @@ fun ConfirmationDialog(
         },
         dismissButton = {
             TextButton(
-                colors = ButtonDefaults.outlinedButtonColors(colorResource(id=R.color.action_orange)),
+                colors = ButtonDefaults.outlinedButtonColors(
+                    colorResource(id=R.color.action_dark)
+                ),
                 onClick = { onDismiss() }) {
-                Text("Cancel")
+                Text(
+                    stringResource(id=R.string.cancel),
+                )
             }
         },
-        contentColor = colorResource(id=R.color.action_orange),
-        title = { Text(text = stringResource(id = R.string.confirmation)) },
-        text = { Text(text = stringResource(id = question)) }
+        contentColor = colorResource(id=R.color.text_light),
+        text = {
+            Text(
+                text = stringResource(id = question),
+                color = colorResource(id=R.color.text_light),
+                style = MaterialTheme.typography.body1,
+            )
+        }
     )
 }

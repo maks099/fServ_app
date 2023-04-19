@@ -42,54 +42,52 @@ fun LoginPage(navController: NavController,viewModel: AuthorizationViewModel,log
 
     Scaffold(
         scaffoldState=scaffoldState,
-
         content={ padding ->
             Column(
                 modifier=Modifier
-                .paint(
-                    painter=painterResource(R.drawable.login_bg),
-                    contentScale=ContentScale.FillHeight
-                )
-                .fillMaxSize(),
+                    .paint(
+                        painter=painterResource(R.drawable.login_bg),
+                        contentScale=ContentScale.FillHeight
+                    )
+                    .fillMaxSize(),
                 horizontalAlignment=Alignment.CenterHorizontally,
                 verticalArrangement=Arrangement.Center
             ) {
-                ProvideWindowInsets(windowInsetsAnimationsEnabled=true) {
-                    Column(
+                Column(
+                    modifier=Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth()
+                        .statusBarsPadding()
+                        .navigationBarsWithImePadding()
+                        .verticalScroll(rememberScrollState())
+                        .clip(RoundedCornerShape(dimensionResource(id=R.dimen.corner)))
+                        .background(colorResource(id=R.color.action_dark).copy(alpha=0.7f))
+                        .blur(
+                            radiusX=250.dp,
+                            radiusY=500.dp,
+                            edgeTreatment=BlurredEdgeTreatment(RoundedCornerShape(dimensionResource(id=R.dimen.corner)))
+                        ),
+                    horizontalAlignment=Alignment.CenterHorizontally
+                ) {
+                    Image(
+                        painter=painterResource(id=R.drawable.fireworks_light),
+                        contentDescription=null,
+                        contentScale=ContentScale.Fit,
                         modifier=Modifier
-                            .padding(16.dp)
-                            .fillMaxWidth()
-                            .statusBarsPadding()
-                            .navigationBarsWithImePadding()
-                            .verticalScroll(rememberScrollState())
-                            .clip(RoundedCornerShape(dimensionResource(id=R.dimen.corner)))
-                            .background(colorResource(id=R.color.action_dark).copy(alpha=0.7f))
-                            .blur(
-                                radiusX=250.dp,
-                                radiusY=500.dp,
-                                edgeTreatment=BlurredEdgeTreatment(RoundedCornerShape(dimensionResource(id=R.dimen.corner)))
-                            ),
-                        horizontalAlignment=Alignment.CenterHorizontally
-                    ) {
-                        Image(
-                            painter=painterResource(id=R.drawable.fireworks_light),
-                            contentDescription=null,
-                            contentScale=ContentScale.Fit,
-                            modifier=Modifier
-                                .padding(dimensionResource(id=R.dimen.logo_padding_medium))
-                                .height(150.dp)
+                            .padding(dimensionResource(id=R.dimen.logo_padding_medium))
+                            .height(150.dp)
 
-                        )
-                        Spacer(modifier=Modifier.height(dimensionResource(id=R.dimen.spacer_height)))
+                    )
 
-                        Text(
-                            text=stringResource(id=R.string.sign_in),
-                            textAlign=TextAlign.Center,
-                            fontWeight=FontWeight.Bold,
-                            style=MaterialTheme.typography.h5,
-                            color=MaterialTheme.colors.primary,
-                        )
-                        Spacer(modifier=Modifier.height(8.dp))
+                    Text(
+                        text=stringResource(id=R.string.sign_in),
+                        textAlign=TextAlign.Center,
+                        fontWeight=FontWeight.Bold,
+                        style=MaterialTheme.typography.h2,
+                        color=MaterialTheme.colors.primary,
+                    )
+                    Spacer(modifier=Modifier.height(8.dp))
+                    ProvideWindowInsets(windowInsetsAnimationsEnabled=true) {
 
                         LoginTextField(
                             value=viewModel.email,
@@ -108,7 +106,7 @@ fun LoginPage(navController: NavController,viewModel: AuthorizationViewModel,log
 
                         Spacer(modifier=Modifier.padding(10.dp))
                         SubmitButton(
-                            R.string.login,
+                            text = stringResource(R.string.login),
                             viewModel.actionButtonStatus
                         ) {
                             fun showSnackbar(
@@ -173,11 +171,9 @@ fun LoginPage(navController: NavController,viewModel: AuthorizationViewModel,log
                         Spacer(modifier=Modifier.padding(5.dp))
                         TextButton(
                             onClick={
-
                                 navController.navigate("forgot_password_page") {
                                     launchSingleTop=true
                                 }
-
                             }) {
                             Text(
                                 text=stringResource(id=R.string.forgot_password_question),

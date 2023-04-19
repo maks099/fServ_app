@@ -51,11 +51,11 @@ fun ForgotPasswordPage(navController: NavController,viewModel: AuthorizationView
                     painter=painterResource(R.drawable.login_bg),
                     contentScale=ContentScale.FillHeight
                 ),
-            contentAlignment = Alignment.Center
+            contentAlignment=Alignment.Center
         ) {
 
             Column(
-                modifier =Modifier
+                modifier=Modifier
                     .padding(16.dp)
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(dimensionResource(id=R.dimen.corner)))
@@ -65,9 +65,8 @@ fun ForgotPasswordPage(navController: NavController,viewModel: AuthorizationView
                         radiusY=500.dp,
                         edgeTreatment=BlurredEdgeTreatment(RoundedCornerShape(dimensionResource(id=R.dimen.corner)))
                     ),
-                horizontalAlignment = Alignment.CenterHorizontally,
+                horizontalAlignment=Alignment.CenterHorizontally,
             ) {
-                ProvideWindowInsets(windowInsetsAnimationsEnabled=true) {
 
                 Image(
                     painter=painterResource(id=R.drawable.fireworks_light),
@@ -77,28 +76,27 @@ fun ForgotPasswordPage(navController: NavController,viewModel: AuthorizationView
                         .padding(dimensionResource(id=R.dimen.logo_padding_medium))
                         .height(150.dp)
                 )
-                    Column(
+                Column(
+                    modifier=Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth()
+                        .statusBarsPadding()
+                        .navigationBarsWithImePadding()
+                        .verticalScroll(rememberScrollState()),
+
+                    horizontalAlignment=Alignment.CenterHorizontally
+                ) {
+
+                    Text(
+                        text=stringResource(id=R.string.pass_recovery),
+                        textAlign=TextAlign.Center,
                         modifier=Modifier
-                            .padding(16.dp)
-                            .fillMaxWidth()
-                            .statusBarsPadding()
-                            .navigationBarsWithImePadding()
-                            .verticalScroll(rememberScrollState()),
-
-                        horizontalAlignment=Alignment.CenterHorizontally
-                    ) {
-
-                        Spacer(modifier=Modifier.height(dimensionResource(id=R.dimen.spacer_height)))
-
-                        Text(
-                            text=stringResource(id=R.string.pass_recovery),
-                            textAlign=TextAlign.Center,
-                            modifier=Modifier
-                                .fillMaxWidth(),
-                            style=MaterialTheme.typography.h5,
-                            color=MaterialTheme.colors.primary,
-                        )
-                        Spacer(modifier=Modifier.height(8.dp))
+                            .fillMaxWidth(),
+                        style=MaterialTheme.typography.h2,
+                        color=MaterialTheme.colors.primary,
+                    )
+                    Spacer(modifier=Modifier.height(8.dp))
+                    ProvideWindowInsets(windowInsetsAnimationsEnabled=true) {
 
                         LoginTextField(
                             value=viewModel.email,
@@ -110,7 +108,7 @@ fun ForgotPasswordPage(navController: NavController,viewModel: AuthorizationView
                         Spacer(modifier=Modifier.padding(10.dp))
 
                         SubmitButton(
-                            R.string.reset_password,
+                            text = stringResource(id=R.string.reset_password),
                             enabled=viewModel.actionButtonStatus
                         ) {
                             fun showSnackbar(

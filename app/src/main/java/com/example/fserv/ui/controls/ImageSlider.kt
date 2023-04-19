@@ -16,8 +16,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
+import coil.request.ImageRequest
 import coil.size.Scale
 import com.example.fserv.R
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -30,13 +35,13 @@ import java.util.*
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun ImageSlider(urlList: List<String>){
-    Log.d("IMAGES", urlList.first())
     val state = rememberPagerState()
-    val imageUrl =
-        remember { mutableStateOf("") }
+    val imageUrl = remember { mutableStateOf("") }
     HorizontalPager(
         state = state,
-        count = urlList.size, modifier = Modifier
+        count = urlList.size,
+        modifier =Modifier
+            .padding(12.dp)
             .height(250.dp)
             .fillMaxWidth()
     ) { page ->
@@ -48,25 +53,27 @@ fun ImageSlider(urlList: List<String>){
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Box(contentAlignment = Alignment.BottomCenter) {
-
-                val painter = rememberImagePainter(data = imageUrl.value, builder = {
-                    placeholder(R.drawable.placeholder)
-                    scale(Scale.FILL)
-                })
+                val painter =rememberAsyncImagePainter(
+                    ImageRequest.Builder(LocalContext.current).data(data=imageUrl.value).apply(block=fun ImageRequest.Builder.() {
+                        placeholder(R.drawable.placeholder)
+                        scale(Scale.FIT)
+                    }).build()
+                )
                 Image(
-                    painter = painter, contentDescription = "",
-                    Modifier
+                    painter = painter,
+                    contentDescription = "",
+                    contentScale = ContentScale.Fit,
+                    modifier =Modifier
                         .padding(8.dp)
                         .clip(RoundedCornerShape(10.dp))
-                        .fillMaxSize(), contentScale = ContentScale.Crop
+                        .fillMaxSize(),
                 )
             }
 
             LaunchedEffect(key1 = state.currentPage) {
-                delay(3000)
+                delay(5000)
                 var newPosition = state.currentPage + 1
                 if (newPosition > urlList.size - 1) newPosition = 0
-                // scrolling to the new position.
                 state.animateScrollToPage(newPosition)
             }
         }
@@ -85,25 +92,26 @@ private fun DotsIndicator(
 ) {
 
     LazyRow(
-        modifier = Modifier
+        modifier =Modifier
             .fillMaxWidth()
-            .wrapContentHeight(), horizontalArrangement = Arrangement.Center
+            .wrapContentHeight(),
+        horizontalArrangement = Arrangement.Center
     ) {
 
         items(totalDots) { index ->
             if (index == selectedIndex) {
                 Box(
-                    modifier = Modifier
+                    modifier =Modifier
                         .size(10.dp)
                         .clip(CircleShape)
-                        .background(color = Color.DarkGray)
+                        .background(color=colorResource(id=R.color.action_dark))
                 )
             } else {
                 Box(
-                    modifier = Modifier
+                    modifier =Modifier
                         .size(10.dp)
                         .clip(CircleShape)
-                        .background(color = Color.LightGray)
+                        .background(color=colorResource(id=R.color.text_light))
                 )
             }
 

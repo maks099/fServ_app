@@ -37,17 +37,15 @@ fun SimpleTags(
         fontSize = 16.sp,
         letterSpacing = 0.15.sp
     ),
-    backgroundColor: Color = Color(0xFFE8E8E8),
-    border: BorderStroke? = null,
     onClick:() -> Unit
 ){
 
     Surface(
         shape = shape,
-        color = if(isActive) colorResource(id=R.color.action_dark) else colorResource(id=R.color.text_light),
+        color = if(isActive) colorResource(id=R.color.action_dark) else colorResource(id=R.color.text_light).copy(alpha = 0.925f),
         modifier = modifier,
         elevation = elevation,
-        border = BorderStroke(1.dp, if(isActive) colorResource(id=R.color.text_light) else colorResource(id=R.color.action_dark))
+        border = BorderStroke(1.dp, if(isActive) colorResource(id=R.color.text_light).copy(alpha = 0.925f) else colorResource(id=R.color.action_dark))
     ) {
         Row(
             modifier =Modifier
@@ -90,7 +88,7 @@ fun SimpleTags(
                     Text(
                         text = text,
                         style = textStyle,
-                        color = if(isActive) colorResource(id=R.color.text_light) else colorResource(id=R.color.action_dark),
+                        color = if(isActive) colorResource(id=R.color.text_light).copy(alpha = 0.925f) else colorResource(id=R.color.action_dark),
                     )
                 }
             }

@@ -12,7 +12,6 @@ val fonts = FontFamily(
         Font(R.font.play)
 )
 
-// Set of Material typography styles to start with
 val Typography = Typography(
         body1 = TextStyle(
                 fontFamily = fonts,
@@ -22,7 +21,7 @@ val Typography = Typography(
         body2 = TextStyle(
                 fontFamily = fonts,
                 fontWeight = FontWeight.Normal,
-                fontSize = 16.sp
+                fontSize = 14.sp
         ),
         subtitle1 = TextStyle(
                 fontFamily = fonts,
@@ -32,12 +31,12 @@ val Typography = Typography(
         h1 = TextStyle(
                 fontFamily = fonts,
                 fontWeight = FontWeight.Normal,
-                fontSize = 26.sp
+                fontSize = 28.sp
         ),
         h2 = TextStyle(
                 fontFamily = fonts,
                 fontWeight = FontWeight.Normal,
-                fontSize = 26.sp
+                fontSize = 24.sp
         ),
         h3 = TextStyle(
                 fontFamily = fonts,
@@ -47,12 +46,12 @@ val Typography = Typography(
         h4 = TextStyle(
                 fontFamily = fonts,
                 fontWeight = FontWeight.Normal,
-                fontSize = 18.sp
+                fontSize = 20.sp
         ),
         h5 = TextStyle(
                 fontFamily = fonts,
                 fontWeight = FontWeight.Normal,
-                fontSize = 26.sp
+                fontSize = 18.sp
         ),
         caption = TextStyle(
                 fontFamily = fonts,

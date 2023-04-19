@@ -3,7 +3,7 @@ package com.example.fserv.api
 import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.example.fserv.model.server.UserActivityObj
+import com.example.fserv.model.server.UserActivity
 import com.example.fserv.model.server.UserActivityResponse
 
 
@@ -11,9 +11,9 @@ import com.example.fserv.model.server.UserActivityResponse
 private const val TAG = "FlickrResponsePagingSource"
 
 class UserActivitiesPagingSource(private val api: Api) :
-    PagingSource<Int, UserActivityObj>() {
+    PagingSource<Int, UserActivity>() {
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, UserActivityObj> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, UserActivity> {
         return try {
 
             val page = params.key ?: 0
@@ -35,7 +35,7 @@ class UserActivitiesPagingSource(private val api: Api) :
         }
     }
 
-    override fun getRefreshKey(state: PagingState<Int , UserActivityObj>): Int? {
+    override fun getRefreshKey(state: PagingState<Int , UserActivity>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
             state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1)
                 ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(1)

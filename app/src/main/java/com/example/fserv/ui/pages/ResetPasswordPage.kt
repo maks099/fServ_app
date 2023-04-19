@@ -61,40 +61,42 @@ fun ResetPasswordPage(
             contentAlignment=Alignment.Center,
         ) {
 
-            ProvideWindowInsets(windowInsetsAnimationsEnabled=true) {
-                Column(
+            Column(
+                modifier=Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth()
+                    .statusBarsPadding()
+                    .navigationBarsWithImePadding()
+                    .verticalScroll(rememberScrollState())
+                    .clip(RoundedCornerShape(dimensionResource(id=R.dimen.corner)))
+                    .background(colorResource(id=R.color.action_dark).copy(alpha=0.7f))
+                    .blur(
+                        radiusX=250.dp,
+                        radiusY=500.dp,
+                        edgeTreatment=BlurredEdgeTreatment(RoundedCornerShape(dimensionResource(id=R.dimen.corner)))
+                    ),
+                horizontalAlignment=Alignment.CenterHorizontally
+            ) {
+                Image(
+                    painter=painterResource(id=R.drawable.fireworks_light),
+                    contentDescription=null,
+                    contentScale=ContentScale.Fit,
                     modifier=Modifier
-                        .padding(16.dp)
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(dimensionResource(id=R.dimen.corner)))
-                        .background(colorResource(id=R.color.action_dark).copy(alpha=0.7f))
-                        .blur(
-                            radiusX=250.dp,
-                            radiusY=500.dp,
-                            edgeTreatment=BlurredEdgeTreatment(RoundedCornerShape(dimensionResource(id=R.dimen.corner)))
-                        ),
-                    horizontalAlignment=Alignment.CenterHorizontally
-                ) {
-                    Image(
-                        painter=painterResource(id=R.drawable.fireworks_light),
-                        contentDescription=null,
-                        contentScale=ContentScale.Fit,
-                        modifier=Modifier
-                            .padding(dimensionResource(id=R.dimen.logo_padding_medium))
-                            .height(150.dp)
+                        .padding(dimensionResource(id=R.dimen.logo_padding_medium))
+                        .height(150.dp)
 
-                        )
-                    Spacer(modifier=Modifier.height(dimensionResource(R.dimen.spacer_height)))
+                )
 
-                    Text(
-                        text=stringResource(id=R.string.reset_password),
-                        textAlign=TextAlign.Center,
-                        modifier=Modifier
-                            .fillMaxWidth(),
-                        style=MaterialTheme.typography.h5,
-                        color=MaterialTheme.colors.primary,
-                    )
-                    Spacer(modifier=Modifier.height(8.dp))
+                Text(
+                    text=stringResource(id=R.string.reset_password),
+                    textAlign=TextAlign.Center,
+                    modifier=Modifier
+                        .fillMaxWidth(),
+                    style=MaterialTheme.typography.h2,
+                    color=MaterialTheme.colors.primary,
+                )
+                Spacer(modifier=Modifier.height(8.dp))
+                ProvideWindowInsets(windowInsetsAnimationsEnabled=true) {
 
                     PasswordTextField(
                         value=viewModel.password,
@@ -106,7 +108,7 @@ fun ResetPasswordPage(
                     Spacer(modifier=Modifier.height(10.dp))
 
                     SubmitButton(
-                        R.string.reset_password,
+                        text = stringResource(R.string.reset_password),
                         enabled=viewModel.actionButtonStatus
                     ) {
                         fun showSnackbar(

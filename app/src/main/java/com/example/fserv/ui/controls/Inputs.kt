@@ -1,6 +1,5 @@
 package com.example.fserv.ui
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -11,7 +10,6 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
@@ -113,7 +111,7 @@ fun PasswordTextField(
         if(isError){
             Text(
                 text = stringResource(id = errorMsg),
-                color = MaterialTheme.colors.error,
+                color = colorResource(id=R.color.error),
                 style = MaterialTheme.typography.caption,
                 modifier = Modifier.padding(start = 16.dp)
             )
@@ -164,11 +162,10 @@ fun ClientNameTextField(
 
 @Composable
 fun SubmitButton(
-    textResource: Int,
+    text: String,
     enabled: Boolean,
     onClick: () -> Unit) {
     val localFocusManager = LocalFocusManager.current
-
     Button(
         onClick = {
             if(enabled){
@@ -182,8 +179,9 @@ fun SubmitButton(
             .height(50.dp)
     ) {
         Text(
-            text = stringResource(id = textResource),
+            text = text,
             fontSize = 20.sp,
+            color = colorResource(id=R.color.text_light),
             style = MaterialTheme.typography.body1
         )
     }

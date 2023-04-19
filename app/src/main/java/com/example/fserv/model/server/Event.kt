@@ -46,13 +46,34 @@ public data class Event(
     }
 }
 @Parcelize
-class UserActivityObj(
+class UserActivity(
     val _id: String,
-    val name: String = "hello",
-    val gallery: List<String>
-) :Parcelable
+    val name: String = "",
+    val gallery: List<String>,
+    val date: String,
+    val secondDate: String?
+) :Parcelable {
+    fun getParsedDate(currentLocale: Locale): String{
+
+        return if(secondDate != null){
+            "${parseJSDate(
+                date,
+                currentLocale
+            )} - ${parseJSDate(
+                secondDate,
+                currentLocale
+            )}"
+        } else {
+            parseJSDate(
+                date,
+                currentLocale
+            )
+        }
+    }
+}
+
 data class UserActivityResponse(
-    val tickets: List<UserActivityObj>
+    val tickets: List<UserActivity>
 )
 
 class EventArgType : JsonNavType<Event>() {

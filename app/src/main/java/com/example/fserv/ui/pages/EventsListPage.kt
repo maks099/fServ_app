@@ -15,6 +15,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,7 +53,7 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
 private lateinit var dialogState: MutableState<Boolean>
 private lateinit var viewModel: EventsListViewModel
-
+private lateinit var loadingAction: MutableState<Boolean>
 @Composable
 fun EventsPage(
     navController: NavController,
@@ -60,25 +62,12 @@ fun EventsPage(
     onEventCardClick: (Event) -> Unit
 ) {
     viewModel=EventsListViewModel.get()
-
+    loadingAction = remember { mutableStateOf(false) }
     dialogState=remember {
         mutableStateOf(false)
     }
 
     Scaffold(
-        topBar={
-            TopAppBar(
-                backgroundColor=colorResource(id=R.color.action_orange)
-            ) {
-                Text(
-                    text=stringResource(id=R.string.app_name),
-                    style=MaterialTheme.typography.h5,
-                    color=colorResource(id=R.color.text_light)
-                )
-            }
-        },
-
-
         ) { paddingValues ->
         Box(
             modifier=Modifier
@@ -95,7 +84,9 @@ fun EventsPage(
         ) {
             Column {
                 SearchPanel(viewModel.searchTerm)
-
+                if(loadingAction.value){
+                    DialogBoxLoading()
+                }
                 LazyRow(
                     modifier=Modifier.padding(
                             horizontal=2.dp,
@@ -132,7 +123,9 @@ fun EventsPage(
                         items(events) { event ->
                             if (event != null) {
                                 EventCard(event=event,
-                                    onEventCardClick={ onEventCardClick(event) })
+                                    onEventCardClick={
+                                        onEventCardClick(event)
+                                    })
                             }
                         }
 
@@ -186,9 +179,10 @@ fun EventCard(
                 vertical=dimensionResource(id=R.dimen.card_padding)
             )
             .clickable {
+                loadingAction.value=true
                 onEventCardClick(event)
             },
-        backgroundColor=colorResource(id=R.color.text_light)
+        backgroundColor=colorResource(id=R.color.text_light).copy(alpha = 0.925f)
 
     ) {
         Row(
@@ -197,8 +191,11 @@ fun EventCard(
         ) {
             val imagePath="https://fserv.onrender.com/photo/" + event.gallery.first()
             AsyncImage(
-                model=ImageRequest.Builder(LocalContext.current).data(imagePath)
-                    .error(R.drawable.placeholder).crossfade(true).build(),
+                model=ImageRequest.Builder(LocalContext.current)
+                    .data(imagePath)
+                    .placeholder(R.drawable.placeholder)
+                    .error(R.drawable.placeholder)
+                    .crossfade(true).build(),
 
                 contentDescription=stringResource(R.string.event_image),
                 contentScale=ContentScale.Crop,
@@ -249,11 +246,12 @@ fun SearchPanel(
         verticalAlignment=Alignment.CenterVertically,
         modifier=Modifier.padding(
                 horizontal=2.dp,
-                vertical=1.dp
+                vertical=6.dp
             )
     ) {
         OutlinedTextField(
             value=value,
+            onValueChange={ newText -> viewModel.updateSearch(newText) },
             maxLines=1,
             colors=TextFieldDefaults.outlinedTextFieldColors(
                 focusedBorderColor=colorResource(id=R.color.text_light),
@@ -261,11 +259,21 @@ fun SearchPanel(
                 placeholderColor=colorResource(id=R.color.text_light),
                 textColor=colorResource(id=R.color.text_light)
             ),
-            onValueChange={ viewModel.updateSearch(it) },
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Default.Search,
+                    contentDescription = "Search",
+                    modifier=Modifier
+                        .width(28.dp)
+                        .height(28.dp)
+                )
+            },
+
             modifier=Modifier
-                .padding(2.dp)
+                .padding(horizontal=2.dp)
                 .weight(1.0f)
-                .fillMaxWidth()
+                .fillMaxWidth(),
+
         )
         IconButton(
             onClick={ dialogState.value=true },
@@ -355,7 +363,7 @@ fun SearchBlock() {
 @Composable
 fun SortBlock() {
     Column(
-        modifier = Modifier
+        modifier =Modifier
             .fillMaxWidth()
             .padding(12.dp)
     ) {
@@ -398,7 +406,7 @@ fun FilterBlock(
     isCheckedFunc: (FilterType) -> Boolean,addFilter: (FilterType) -> Unit
 ) {
     Column(
-        modifier = Modifier
+        modifier =Modifier
             .fillMaxWidth()
             .padding(12.dp)
     ) {

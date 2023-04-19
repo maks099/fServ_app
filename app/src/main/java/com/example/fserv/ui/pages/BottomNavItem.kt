@@ -26,6 +26,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.fserv.R
+import com.example.fserv.ui.controls.DialogBoxLoading
 import com.example.fserv.view_models.ActivitiesListViewModel
 import com.example.fserv.view_models.EventsListViewModel
 import com.example.fserv.view_models.TicketsListViewModel
@@ -110,7 +111,7 @@ fun NavigationGraph(navController: NavController,
                 activityListState = activityListState,
                 activities,
                 onUserActivityClick = {
-                    navController.navigate("tickets_list_page/${it._id}") {
+                    navController.navigate("tickets_list_page/${it._id}/${it.name}") {
                         launchSingleTop = true
                     }
                 }

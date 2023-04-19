@@ -70,7 +70,7 @@
     <string name="warning">Warning!</string>
     <string name="event_is_removed">The organizer deleted the event for which you bought a ticket from</string>
     <string name="recharge">Recharge</string>
-    <string name="choose_amount">Choose an amount:</string>
+    <string name="choose_amount">Amount</string>
     <string name="google_pay">Google Pay</string>
     <string name="debit_card">Debit card</string>
     <string name="logo">Logo</string>
@@ -86,6 +86,10 @@
     <string name="account">Account</string>
     <string name="search_and_filter">Search and filters</string>
     <string name="try_again">Try again</string>
+    <string name="you_have_not_activities">You have not any activities</string>
+    <string name="your_activities">Your activities:</string>
+    <string name="pick_ticket_type">Please select the type of ticket and their number</string>
+    <string name="cancel">Cancel</string>
 
 
 </resources>
