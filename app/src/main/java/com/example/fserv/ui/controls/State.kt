@@ -87,7 +87,7 @@ fun ErrorItem(
             text=message,
             maxLines=1,
             style=MaterialTheme.typography.h6,
-            color=Color.Red
+            color=colorResource(id=R.color.error)
         )
         OutlinedButton(
             onClick=onClickRetry,

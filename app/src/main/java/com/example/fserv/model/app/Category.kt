@@ -25,8 +25,8 @@ enum class Category(
         tagName = R.string.mys_tag,
         code = 3
     ),
-    Lessons(
-        tagName = R.string.lessons_tag,
+    Sport(
+        tagName = R.string.sport_tag,
         code = 4
     ),
     Food(

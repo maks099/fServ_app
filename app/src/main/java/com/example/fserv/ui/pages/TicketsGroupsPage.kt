@@ -6,8 +6,10 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -16,7 +18,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.Font
@@ -24,6 +29,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.example.fserv.R
 import com.example.fserv.model.app.DownloadType
 import com.example.fserv.model.server.TicketGroup
@@ -44,7 +51,7 @@ fun TicketsGroups(navController: NavController,viewModel: TicketsGroupsListViewM
     val toPay=ticketCount.value * selectedValue.price
 
 
-
+    val scrollState=rememberScrollState()
     Scaffold { paddingValues ->
 
         Column(
@@ -53,6 +60,7 @@ fun TicketsGroups(navController: NavController,viewModel: TicketsGroupsListViewM
             modifier=Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
+                .verticalScroll(scrollState)
                 .background(
                     Brush.verticalGradient(
                         listOf(
@@ -62,6 +70,8 @@ fun TicketsGroups(navController: NavController,viewModel: TicketsGroupsListViewM
                     )
                 ),
         ) {
+            Scena(viewModel.event._id)
+
             Text(
                 text = stringResource(id=R.string.pick_ticket_type),
                 color = colorResource(R.color.text_light),
@@ -69,20 +79,18 @@ fun TicketsGroups(navController: NavController,viewModel: TicketsGroupsListViewM
                 style = MaterialTheme.typography.h3,
                 modifier = Modifier.padding(12.dp)
             )
-            LazyColumn(
-                modifier=Modifier
-                    .padding(
-                        horizontal = 12.dp,
-                    )
-                    .clip(RoundedCornerShape(10.dp))
-                    .background(color=colorResource(id=R.color.text_light))
-                    .border(
-                        2.dp,
-                        colorResource(id=R.color.text_light),
-                        RoundedCornerShape(10.dp)
-                    )
+
+            Column(
+                modifier =Modifier
+                    .padding(horizontal=16.dp)
+                    .clip(RoundedCornerShape(16.dp))
+
+                    .background(colorResource(id=R.color.text_light).copy(0.25f))
+                    .clip(RoundedCornerShape(16.dp))
             ) {
-                items(viewModel.ticketsGroups) { ticketGroup ->
+
+                viewModel.ticketsGroups.forEach { ticketGroup ->
+
                     TicketGroupRow(
                         ticketGroup,
                         {
@@ -100,6 +108,10 @@ fun TicketsGroups(navController: NavController,viewModel: TicketsGroupsListViewM
                 }
             }
 
+
+
+
+
             HorizontalNumberPicker(
                 min=0,
                 max=selectedValue.count,
@@ -111,7 +123,7 @@ fun TicketsGroups(navController: NavController,viewModel: TicketsGroupsListViewM
             )
 
             SubmitButton(
-                text = "${stringResource(id=R.string.to_pay)} $toPay",
+                text = "${stringResource(id=R.string.to_pay)} $toPay ${stringResource(R.string.currency_short)}",
                 onClick={
 
                     if (toPay > viewModel.account) {
@@ -159,6 +171,70 @@ fun TicketsGroups(navController: NavController,viewModel: TicketsGroupsListViewM
 }
 
 @Composable
+private fun Scena(
+    scenaId: String
+){
+    Column(
+        modifier = Modifier
+            .padding(horizontal=16.dp)
+            .padding(top = 16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Row(
+            modifier =Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                stringResource(id=R.string.scena),
+                color = colorResource(R.color.text_light),
+                style = MaterialTheme.typography.h3,
+            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Box(modifier =Modifier
+                    .size(20.dp)
+                    .border(
+                        1.dp,
+                        Color.Black,
+                        RoundedCornerShape(5.dp)
+                    )
+                    .background(Color(android.graphics.Color.parseColor("#D2691E")))
+                    .padding(8.dp)
+                )
+                Text(
+                    stringResource(id=R.string.scena_obj),
+                    color = colorResource(R.color.text_light),
+                    style = MaterialTheme.typography.body1,
+                    modifier = Modifier.padding(8.dp)
+                )
+
+            }
+        }
+
+        val imagePath="https://fserv.onrender.com/scena/" + scenaId
+        println(imagePath)
+        AsyncImage(
+            model=ImageRequest.Builder(LocalContext.current)
+                .data(imagePath)
+                .placeholder(R.drawable.placeholder)
+                .error(R.drawable.placeholder)
+                .crossfade(true).build(),
+            contentDescription = "",
+            contentScale = ContentScale.FillBounds,
+            modifier =Modifier
+                .padding(8.dp)
+                .clip(RoundedCornerShape(10.dp))
+                .height(260.dp)
+                .fillMaxSize(),
+        )
+    }
+
+}
+
+@Composable
 private fun TicketGroupRow(
     ticketGroup: TicketGroup,
     onClick: (TicketGroup) -> Unit,
@@ -176,9 +252,9 @@ private fun TicketGroupRow(
             .clip(RoundedCornerShape(10.dp))
             .background(
                 if (isSelectedItem(ticketGroup))
-                    colorResource(id=R.color.action_orange)
+                    colorResource(id=R.color.action_dark)
                 else
-                    colorResource(id=R.color.text_light).copy(0.925f)
+                    Color(android.graphics.Color.parseColor(ticketGroup.color))
             )
             .padding(12.dp),
 
@@ -188,10 +264,12 @@ private fun TicketGroupRow(
         Text(
             text = ticketGroup.name,
             fontWeight = FontWeight.Bold,
-            style = MaterialTheme.typography.h3
+            style = MaterialTheme.typography.h3,
+            color = colorResource(id=R.color.text_light)
         )
         Text(
             text="${ticketGroup.price} ${stringResource(id=R.string.currency_short)}",
+            color = colorResource(id=R.color.text_light)
         )
     }
 }

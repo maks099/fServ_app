@@ -27,8 +27,7 @@
     <string name="sort_by">Sort by</string>
     <string name="name">name</string>
     <string name="address">location</string>
-    <string name="date_ascending">date asc</string>
-    <string name="date_descending">date desc</string>
+    <string name="date_descending">date descending</string>
     <string name="event_image">Event image</string>
     <string name="empty_list">List is empty</string>
     <string name="dialog_ok">OK</string>
@@ -38,7 +37,7 @@
     <string name="football_tag">Football</string>
     <string name="mys_tag">Art</string>
     <string name="all_tag">All</string>
-    <string name="lessons_tag">Lessons</string>
+    <string name="sport_tag">Sport</string>
     <string name="food_tag">Food</string>
     <string name="health_tag">Health</string>
     <string name="paid_filter">Paid</string>
@@ -70,8 +69,7 @@
     <string name="warning">Warning!</string>
     <string name="event_is_removed">The organizer deleted the event for which you bought a ticket from</string>
     <string name="recharge">Recharge</string>
-    <string name="choose_amount">Amount</string>
-    <string name="google_pay">Google Pay</string>
+    <string name="google_pay" translatable="false">Google Pay</string>
     <string name="debit_card">Debit card</string>
     <string name="logo">Logo</string>
     <string name="version">Version</string>
@@ -90,6 +88,11 @@
     <string name="your_activities">Your activities:</string>
     <string name="pick_ticket_type">Please select the type of ticket and their number</string>
     <string name="cancel">Cancel</string>
+    <string name="date_ascending">date ascending</string>
+    <string name="choose_amount">Specify the amount</string>
+    <string name="scena_image">Scena image</string>
+    <string name="scena">Layout</string>
+    <string name="scena_obj">— сцена</string>
 
 
 </resources>

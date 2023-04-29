@@ -13,7 +13,8 @@ class TicketGroup(
     val name: String,
     val price: Int,
     val count: Int,
-    val eventID: String
+    val eventID: String,
+    val color: String
 ):Parcelable{
     override fun toString(): String = Uri.encode(Gson().toJson(this))
 }
