@@ -76,12 +76,12 @@ fun ErrorItem(
     modifier: Modifier=Modifier,
     onClickRetry: () -> Unit
 ) {
-    Row(
+    Column(
         modifier=modifier
             .fillMaxWidth()
             .padding(8.dp),
-        horizontalArrangement=Arrangement.SpaceAround,
-        verticalAlignment=Alignment.CenterVertically
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
         Text(
             text=message,

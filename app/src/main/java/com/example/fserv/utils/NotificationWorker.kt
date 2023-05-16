@@ -1,9 +1,15 @@
 package com.example.fserv.utils
 
+import android.Manifest
 import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
+import android.content.pm.PackageManager
+import android.os.Build
 import android.util.Log
+import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.CoroutineWorker
@@ -33,6 +39,13 @@ class NotificationWorker(
         val clientId = preferencesRepository.userID.first().replace("\"", "")
 
         val dataRepository = DataRepository()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val notificationChannel = NotificationChannel(NOTIFICATION_CHANNEL_ID, "test", NotificationManager.IMPORTANCE_HIGH)
+            notificationChannel.enableLights(true)
+            notificationChannel.enableVibration(false)
+            NotificationManagerCompat.from(context).createNotificationChannel(notificationChannel)
+
+        }
 
         return try {
             dataRepository.searchNotifications(clientId).enqueue(
@@ -44,6 +57,7 @@ class NotificationWorker(
                         if (response.isSuccessful){
                             val list = response.body()?.notifications
                             if (list != null && list.isNotEmpty()) {
+                                Log.d("NOTIFIER", "notify")
                                 notifyUser(list.first().message)
                             }
                         }
@@ -73,6 +87,15 @@ class NotificationWorker(
                 .bigText(message))
             .setAutoCancel(true)
             .build()
-        NotificationManagerCompat.from(context).notify(0, notification)
+        if (ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            NotificationManagerCompat.from(context).notify(1234, notification)
+
+            return
+        }
+        NotificationManagerCompat.from(context).notify(1234, notification)
     }
 }

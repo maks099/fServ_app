@@ -27,9 +27,9 @@
     <string name="logo">Логотип</string>
     <string name="version">Версія</string>
     <string name="create_an_account">Створити акаунт</string>
-    <string name="remove_ticket_confirm">Якщо Ви видалите цей білет, то Вам буде повернуто тільки 75% від його вартості. Продовжити?</string>
-    <string name="ticket_is_removed">Білет видалено</string>
-    <string name="delete_ticket">Видалити білет</string>
+    <string name="remove_ticket_confirm">Якщо Ви видалите цей квиток, то Вам буде повернуто тільки 75% від його вартості. Продовжити?</string>
+    <string name="ticket_is_removed">Квиток видалено</string>
+    <string name="delete_ticket">Видалити квиток</string>
     <string name="back">Повернутись</string>
     <string name="please_wait">Будь ласка, почекайте...</string>
     <string name="filter">Фільтр</string>
@@ -39,12 +39,12 @@
     <string name="try_again">Спробувати ще раз</string>
     <string name="you_have_not_activities">У вас немає активностей</string>
     <string name="your_activities">Ваші активності:</string>
-    <string name="pick_ticket_type">Будь ласка, виберіть тип білетів та їх кількість</string>
+    <string name="pick_ticket_type">Будь ласка, виберіть тип квитків та їх кількість</string>
     <string name="cancel">Відмінити</string>
     <string name="date_ascending">даті за зростанням</string>
     <string name="date_descending">даті за спаданням</string>
     <string name="event_image">Фото події</string>
-    <string name="empty_list">Події не знайдено</string>
+    <string name="empty_list">Пусто</string>
     <string name="dialog_ok">ОК</string>
     <string name="music_tag">Музика</string>
     <string name="study_tag">Навчання</string>
@@ -59,7 +59,7 @@
     <string name="organizer">Організатор:</string>
     <string name="date">Дата події</string>
     <string name="free_entrance">Вхід вільний</string>
-    <string name="buy_ticket">Купити білет</string>
+    <string name="buy_ticket">Купити квиток</string>
     <string name="to_pay">До оплати</string>
     <string name="not_enough_funds">На вашому рахунку недостатньо коштів!</string>
     <string name="error">Помилка</string>
@@ -68,7 +68,7 @@
     <string name="input_first_name">Ім\'я</string>
     <string name="name_length_error">це значення має містити мінімум 3 символи</string>
     <string name="input_last_name">Прізвище</string>
-    <string name="ticketsFor">"Білети "</string>
+    <string name="ticketsFor">"Квитки "</string>
     <string name="open_ticket_file">Відкрити файл</string>
     <string name="share_ticket_file">Поділитися</string>
     <string name="on_your_account">Ваш рахунок</string>
@@ -81,10 +81,11 @@
     <string name="password_is_not_valid">Не валідний пароль</string>
     <string name="check_in_progress">Триває перевірка</string>
     <string name="warning">Увага!</string>
-    <string name="event_is_removed">"Організатор видалив подію, на яку ви купили білет, "</string>
+    <string name="event_is_removed">"Організатор видалив подію, на яку ви купили квитки... "</string>
     <string name="recharge">Поповнити</string>
     <string name="choose_amount">Вкажіть  суму</string>
     <string name="scena_image">Фото схеми</string>
     <string name="scena">Схема розміщень</string>
     <string name="scena_obj">— сцена</string>
+    <string name="connection_error">Помилка підключення</string>
 </resources>

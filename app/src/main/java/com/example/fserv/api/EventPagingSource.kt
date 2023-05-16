@@ -8,7 +8,7 @@ import com.example.fserv.model.app.SearchOptions
 import com.example.fserv.model.server.EventResponse
 
 
-private const val TAG = "FlickrResponsePagingSource"
+private const val TAG = "EventPagingSource"
 
 class EventPagingSource(private val api: Api , val options: SearchOptions) :
     PagingSource<Int, Event>() {

@@ -140,7 +140,7 @@ fun EventsPage(
                                 loadState.refresh is LoadState.Error -> {
                                     val e=events.loadState.refresh as LoadState.Error
                                     item {
-                                        ErrorItem(message=e.error.localizedMessage!!,
+                                        ErrorItem(message=stringResource(id=R.string.connection_error),
                                             modifier=Modifier.fillParentMaxSize(),
                                             onClickRetry={ retry() })
                                     }
@@ -148,7 +148,7 @@ fun EventsPage(
                                 loadState.append is LoadState.Error -> {
                                     val e=events.loadState.append as LoadState.Error
                                     item {
-                                        ErrorItem(message=e.error.localizedMessage!!,
+                                        ErrorItem(message=stringResource(id=R.string.connection_error),
                                             onClickRetry={ retry() })
                                     }
                                 }
@@ -189,7 +189,8 @@ fun EventCard(
             verticalAlignment=Alignment.CenterVertically,
             modifier=Modifier.padding(8.dp)
         ) {
-            val imagePath="https://fserv.onrender.com/photo/" + event.gallery.first()
+            val imagePath = event.gallery.first()
+            println(imagePath)
             AsyncImage(
                 model=ImageRequest.Builder(LocalContext.current)
                     .data(imagePath)

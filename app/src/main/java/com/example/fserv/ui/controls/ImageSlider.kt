@@ -45,7 +45,7 @@ fun ImageSlider(urlList: List<String>){
             .height(250.dp)
             .fillMaxWidth()
     ) { page ->
-        imageUrl.value = "https://fserv.onrender.com/photo/" + urlList[page]
+        imageUrl.value = urlList[page]
 
         Column(
             modifier = Modifier.fillMaxSize(),

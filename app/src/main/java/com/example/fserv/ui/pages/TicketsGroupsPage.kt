@@ -252,7 +252,7 @@ private fun TicketGroupRow(
             .clip(RoundedCornerShape(10.dp))
             .background(
                 if (isSelectedItem(ticketGroup))
-                    colorResource(id=R.color.action_dark)
+                    colorResource(id=R.color.action_orange)
                 else
                     Color(android.graphics.Color.parseColor(ticketGroup.color))
             )

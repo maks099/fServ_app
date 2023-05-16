@@ -154,9 +154,11 @@ fun AccountPage(
 
                 StripeWay(
                     onPaymentResult={
+                        println("result")
                         viewModel.handleStripeResult(
                             it
                         ) {
+                            println("err")
                             showSnackBar(
                                 R.string.error,
                                 ""
@@ -171,6 +173,7 @@ fun AccountPage(
                                 func(args)
                             },
                             onError={
+                                println("error")
                                 showSnackBar(
                                     R.string.error,
                                     it
@@ -291,6 +294,7 @@ fun StripeWay(
             onPaymentResult(it)
         }
     )
+
 
     PaymentMethodRow(
         drawable=com.stripe.android.R.drawable.stripe_3ds2_ic_mastercard,
@@ -484,9 +488,14 @@ private fun PayPanel(amount: String,onChange: (String) -> Unit,onClose: () -> Un
                             onChange(it)
 
                         } else {
-                            if(it.matches(Regex("^\\d+\$")) && it.toInt() > 0 && it.toInt() <= 10000){
+                            try {
+                                Integer.parseInt(it)
+                                if (it.matches(Regex("^\\d+\$")) && it.toInt() > 0 && it.toInt() <= 10000) {
                                     onChange(it)
 
+                                }
+                            } catch (ex: java.lang.NumberFormatException){
+                                ex.printStackTrace()
                             }
                         }
 

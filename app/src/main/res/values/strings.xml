@@ -93,6 +93,7 @@
     <string name="scena_image">Scena image</string>
     <string name="scena">Layout</string>
     <string name="scena_obj">— сцена</string>
+    <string name="connection_error">Connection error</string>
 
 
 </resources>

@@ -18,7 +18,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-private const val TAG = "LoginViewModel"
+private const val TAG = "AuthorizaitonViewModel"
 public class AuthorizationViewModel(val application: Application): ViewModel() {
 
     private val dataRepository: DataRepository = DataRepository.get()
