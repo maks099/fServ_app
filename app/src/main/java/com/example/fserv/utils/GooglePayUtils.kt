@@ -121,11 +121,9 @@ fun possiblyShowGooglePayButton(activity: Activity, onSuccess: () -> Unit){
     task.addOnCompleteListener { completedTask ->
         try {
             completedTask.getResult(ApiException::class.java)?.let {
-                Log.d("TAG", "heel")
                 onSuccess()
             }
         } catch (exception: ApiException) {
-            Log.w("isReadyToPay failed", exception)
         }
     }
 }
